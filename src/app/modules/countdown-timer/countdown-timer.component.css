@@ -1,0 +1,31 @@
+.container.default {
+    background-color: lightgreen;
+}
+
+.container.urgent {
+    background-color: red;
+}
+
+.container.middle {
+    background-color: orange;
+}
+
+.container.break {
+    background-color: cornflowerblue;
+}
+
+.content {
+    text-align: center;
+    font-size: 240px;
+    margin: 0 50px;
+    padding-top: 100px;
+    height: 100%;
+}
+
+.content .exercise-title {
+    font-size: 80px;
+}
+
+.content .countdown-single, .content .countdown-zero {
+    font-size: 360px;
+}

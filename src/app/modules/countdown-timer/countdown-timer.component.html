@@ -1,0 +1,31 @@
+<GridLayout class="countdown-timer container" hideActionBar rows="*, auto" [ngClass]="urgencyClass">
+    <StackLayout class="content">
+
+        <StackLayout class="exercise-title">
+            <Label [text]="currentExercise"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="currentNumber >= 1 && currentNumber > 9" class="countdown-double">
+            <Label [text]="currentNumber"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="currentNumber >= 1 && currentNumber <= 9" class="countdown-single" #countdownSingle>
+            <Label [text]="currentNumber"></Label>
+        </StackLayout>
+
+        <StackLayout *ngIf="currentNumber == 0" class="countdown-zero">
+            <Label [text]="0!"></Label>
+        </StackLayout>
+
+    </StackLayout>
+
+
+    <StackLayout row="1" height="50">
+
+        <GridLayout columns="*, *" rows="auto, auto">
+            <Button (tap)="startRoutine(['break', 'sec60', 'break', 'sec30', 'break'])" text="Start" column="0"></Button>
+            <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
+        </GridLayout>
+
+    </StackLayout>
+</GridLayout>
