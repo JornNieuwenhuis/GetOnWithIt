@@ -23,7 +23,7 @@
     <StackLayout row="1" height="50">
 
         <GridLayout columns="*, *" rows="auto, auto">
-            <Button (tap)="startRoutine(['break', 'sec60', 'break', 'sec30', 'break'])" text="Start" column="0"></Button>
+            <Button (tap)="startRoutine()" text="Start" column="0"></Button>
             <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
         </GridLayout>
 

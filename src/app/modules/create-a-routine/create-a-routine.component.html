@@ -1,1 +1,21 @@
-<Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
+<StackLayout>
+
+    <StackLayout>
+        <Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
+    </StackLayout>
+
+    <GridLayout rows="*" columns="*,*,*" height="600px">
+        <Button text="Break" column="0" (tap)="sequenceService.addSequence('break', 'break')"></Button>
+        <Button text="30sec" column="1" (tap)="sequenceService.addSequence('sec30', 'push-ups')"></Button>
+        <Button text="60sec" column="2" (tap)="sequenceService.addSequence('sec60', 'sit-ups')"></Button>
+    </GridLayout>
+
+    <GridLayout rows="*" columns="*,*,*" height="100px" *ngFor="let sequence of sequenceService.currentSequence">
+        <StackLayout>
+            <Label [text]="sequence['name']"></Label>
+        </StackLayout>
+    </GridLayout>
+
+</StackLayout>
+
+

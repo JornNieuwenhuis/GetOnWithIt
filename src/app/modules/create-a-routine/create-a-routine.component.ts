@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
+import { SequenceService } from '~/app/services/sequence.service';
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -8,9 +9,12 @@ import { RoutingService } from '~/app/services/routing.service';
 })
 export class CreateARoutineComponent implements OnInit {
 
-  constructor(public routingService: RoutingService) { }
+    constructor(public routingService: RoutingService, public sequenceService: SequenceService) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+        this.sequenceService.currentSequence.length = 0;
+    }
+
+
 
 }
