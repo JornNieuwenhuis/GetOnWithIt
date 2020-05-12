@@ -5,14 +5,24 @@
     </StackLayout>
 
     <GridLayout rows="*" columns="*,*,*" height="600px">
-        <Button text="Break" column="0" (tap)="sequenceService.addSequence('break', 'break')"></Button>
-        <Button text="30sec" column="1" (tap)="sequenceService.addSequence('sec30', 'push-ups')"></Button>
-        <Button text="60sec" column="2" (tap)="sequenceService.addSequence('sec60', 'sit-ups')"></Button>
+        <Button text="break" column="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
+        <Button text="30s"   column="1" (tap)="selectTime('30s')"     [ngClass]="checkTimeSelection('30s')"></Button>
+        <Button text="60s"   column="2" (tap)="selectTime('60s')"     [ngClass]="checkTimeSelection('60s')"></Button>
     </GridLayout>
+
+    <StackLayout height="600px">
+        <ListView [items]="sequenceService.activities" class="list-group">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <GridLayout (tap)="selectActivity(item.name)" [ngClass]="checkActSelection(item.name)">
+                    <Label [text]="item.name" class="list-group-item"></Label>
+                </GridLayout>
+            </ng-template>
+        </ListView>
+    </StackLayout>
 
     <GridLayout rows="*" columns="*,*,*" height="100px" *ngFor="let sequence of sequenceService.currentSequence">
         <StackLayout>
-            <Label [text]="sequence['name']"></Label>
+            <Label [text]="getString(sequence['duration'], sequence['name'])"></Label>
         </StackLayout>
     </GridLayout>
 

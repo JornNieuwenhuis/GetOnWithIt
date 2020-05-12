@@ -5,15 +5,15 @@
             <Label [text]="currentExercise"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="currentNumber >= 1 && currentNumber > 9" class="countdown-double">
-            <Label [text]="currentNumber"></Label>
+        <StackLayout *ngIf="timer >= 1 && timer > 9" class="countdown-double">
+            <Label [text]="timer"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="currentNumber >= 1 && currentNumber <= 9" class="countdown-single" #countdownSingle>
-            <Label [text]="currentNumber"></Label>
+        <StackLayout *ngIf="timer >= 1 && timer <= 9" class="countdown-single" #countdownSingle>
+            <Label [text]="timer"></Label>
         </StackLayout>
 
-        <StackLayout *ngIf="currentNumber == 0" class="countdown-zero">
+        <StackLayout *ngIf="timer == 0" class="countdown-zero">
             <Label [text]="0!"></Label>
         </StackLayout>
 
