@@ -10,6 +10,7 @@ import {
     remove,
     clear
 } from "tns-core-modules/application-settings";
+import { SqliteService } from './sqlite.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +19,7 @@ export class SequenceService {
 
     public currentSequence = [];
 
-    //TODO: Retrieve from memory
-    public activities = new Array<any>(
-        { id: 1, name: "pushups" },
-        { id: 2, name: "pullups" },
-        { id: 3, name: "planking" },
-        { id: 4, name: "rennen" },
-        { id: 5, name: "situps" },
-        { id: 6, name: "luchtboxen" },
-        { id: 7, name: "jumping jacks" },
-        { id: 8, name: "gewichten" },
-        { id: 9, name: "fietsen" }
-    );
+    public activities;
 
     public durations = {
         'break': { 'seconds': 10 },
@@ -37,9 +27,27 @@ export class SequenceService {
         '60s': { 'seconds': 60, 'middleMark': 30, 'urgentMark': 10 }
     }
 
-    constructor() { }
+    constructor(private sqlite: SqliteService) {
+        this.getAllActivities();
+    }
 
     public addToSequence(duration: String, name: String) {
         this.currentSequence.push({'duration': duration, 'name': name});
     }
+
+    public getAllActivities() {
+        this.sqlite.getAll("activities").then(result => {
+            this.activities = result;
+            for(let i = 0; i < Object.keys(result).length; i++) {
+                this.activities[i] = {'id': result[i][0], 'name': result[i][1]};
+            }
+        });
+    }
+
+    public addActivity(name: String) {
+        this.sqlite.executeSql("INSERT INTO activities (name) VALUES (?)", [name]).then(() => {
+            this.getAllActivities();
+        });
+    }
+
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
 import { SequenceService } from '~/app/services/sequence.service';
+import * as dialogs from "tns-core-modules/ui/dialogs";
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -12,7 +13,9 @@ export class CreateARoutineComponent implements OnInit {
     public selectedTime: String;
     public selectedAct:  String;
 
-    constructor(public routingService: RoutingService, public sequenceService: SequenceService) { }
+    constructor(
+        public routingService: RoutingService,
+        public sequenceService: SequenceService) { }
 
     ngOnInit(): void {
         this.sequenceService.currentSequence.length = 0;
@@ -56,5 +59,17 @@ export class CreateARoutineComponent implements OnInit {
             return 'break';
         }
         return duration + ' ' + name;
+    }
+
+    public addActivity() {
+        dialogs.prompt({
+            title: "New activity",
+            okButtonText: "OK",
+            cancelButtonText: "Cancel"
+        }).then(input => {
+            if(input.result) {
+                this.sequenceService.addActivity(input.text);
+            }
+        });
     }
 }

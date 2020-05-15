@@ -4,12 +4,14 @@
         <Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
     </StackLayout>
 
+    <!-- Times to choose from -->
     <GridLayout rows="*" columns="*,*,*" height="600px">
         <Button text="break" column="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
         <Button text="30s"   column="1" (tap)="selectTime('30s')"     [ngClass]="checkTimeSelection('30s')"></Button>
         <Button text="60s"   column="2" (tap)="selectTime('60s')"     [ngClass]="checkTimeSelection('60s')"></Button>
     </GridLayout>
 
+    <!-- List of activities -->
     <StackLayout height="600px">
         <ListView [items]="sequenceService.activities" class="list-group">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
@@ -20,6 +22,12 @@
         </ListView>
     </StackLayout>
 
+    <!-- Add activity button -->
+    <StackLayout>
+        <Button text="+" (tap)="addActivity()"></Button>
+    </StackLayout>
+
+    <!-- Create combinations time-activity for sequence (To be removed) -->
     <GridLayout rows="*" columns="*,*,*" height="100px" *ngFor="let sequence of sequenceService.currentSequence">
         <StackLayout>
             <Label [text]="getString(sequence['duration'], sequence['name'])"></Label>

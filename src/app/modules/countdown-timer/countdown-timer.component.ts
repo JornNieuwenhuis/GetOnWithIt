@@ -25,6 +25,7 @@ export class CountdownTimerComponent {
     }
 
     public async startRoutine() {
+        //TODO: display name of exercise between every exercise for 5 secs
         for(let sequence of this.sequenceService.currentSequence) {
             this.urgencyClass    = sequence['name'] === 'break' ? 'break' : 'default';
             this.currentExercise = sequence['name'];
