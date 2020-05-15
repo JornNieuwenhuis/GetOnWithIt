@@ -11,8 +11,8 @@ import { SequenceService } from '~/app/services/sequence.service';
 export class CountdownTimerComponent {
 
     public timer: number;
-    public currentExercise: String;
-    public urgencyClass: String = 'default';
+    public currentExercise: string;
+    public urgencyClass: string = 'default';
     private middleMark: number;
     private urgentMark: number;
 
@@ -27,11 +27,18 @@ export class CountdownTimerComponent {
     public async startRoutine() {
         //TODO: display name of exercise between every exercise for 5 secs
         for(let sequence of this.sequenceService.currentSequence) {
-            this.urgencyClass    = sequence['name'] === 'break' ? 'break' : 'default';
+
             this.currentExercise = sequence['name'];
             this.timer           = this.sequenceService.durations[sequence['duration']]['seconds'];
             this.middleMark      = this.sequenceService.durations[sequence['duration']]['middleMark'];
             this.urgentMark      = this.sequenceService.durations[sequence['duration']]['urgentMark'];
+
+            if(sequence["name"] != 'break') {
+                for(let i = 5; i >= 0; i--) {
+                    this.urgencyClass = 'changeTime';
+                    await this.delay();
+                }
+            }
 
             for(let i = this.timer; i >= 1; i--) {
                 this.timer -= 1;

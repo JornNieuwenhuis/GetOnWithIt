@@ -15,8 +15,11 @@
     <StackLayout height="600px">
         <ListView [items]="sequenceService.activities" class="list-group">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <GridLayout (tap)="selectActivity(item.name)" [ngClass]="checkActSelection(item.name)">
-                    <Label [text]="item.name" class="list-group-item"></Label>
+                <GridLayout
+                (tap)="selectActivity(item.name)"
+                (longPress)="removeActivity(item.id, item.name)"
+                [ngClass]="checkActSelection(item.name)">
+                        <Label [text]="item.name" class="list-group-item"></Label>
                 </GridLayout>
             </ng-template>
         </ListView>

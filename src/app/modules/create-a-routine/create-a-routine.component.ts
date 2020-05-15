@@ -72,4 +72,16 @@ export class CreateARoutineComponent implements OnInit {
             }
         });
     }
+
+    public removeActivity(id, name) {
+        dialogs.prompt({
+            title: "Remove " + name + "?",
+            okButtonText: "OK",
+            cancelButtonText: "Cancel"
+        }).then(input => {
+            if(input.result) {
+                this.sequenceService.removeActivity(id);
+            }
+        });
+    }
 }

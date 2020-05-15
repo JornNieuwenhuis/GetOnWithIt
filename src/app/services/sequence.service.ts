@@ -50,4 +50,10 @@ export class SequenceService {
         });
     }
 
+    public removeActivity(id) {
+        this.sqlite.executeSql("DELETE FROM activities WHERE id = ?", [id]).then(() => {
+            this.getAllActivities();
+        });
+    }
+
 }

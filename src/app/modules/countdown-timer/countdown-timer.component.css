@@ -14,6 +14,14 @@
     background-color: cornflowerblue;
 }
 
+.container.changeTime {
+    background-color: blueviolet;
+}
+
+.container.changeTime .exercise-title{
+    padding-top: 600px;
+}
+
 .content {
     text-align: center;
     font-size: 240px;
