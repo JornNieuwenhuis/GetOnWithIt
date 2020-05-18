@@ -21,14 +21,14 @@
 
             <StackLayout class="sequence-overview" orientation="vertical">
 
-                <AbsoluteLayout
+                <StackLayout
                     height="100px"
                     class="routine-title"
                     horizontalAlignment="center">
 
                     <Label [text]="sequenceService.currentRoutineTitle"></Label>
 
-                </AbsoluteLayout>
+                </StackLayout>
 
                 <!-- Create combinations time-activity for sequence -->
                 <StackLayout [height]="orientationService.orientation == 'portrait' ? '800px' : '650px'" horizontalAlignment="center">
@@ -43,6 +43,7 @@
                         </ListView>
                     </StackLayout>
 
+                    <!-- Placeholder -->
                     <StackLayout *ngIf="sequenceService.currentSequence.length == 0">
                         <Label text="Add activities below to get started!"></Label>
                     </StackLayout>
@@ -50,7 +51,7 @@
                 </StackLayout>
 
                 <GridLayout verticalAlignment="bottom" columns="*, *" rows="*">
-                    <Label col="0" text="Total: "></Label>
+                    <Label col="0" [text]="getTotalString()"></Label>
                     <Button col="1" text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
                 </GridLayout>
 

@@ -24,8 +24,7 @@ export class CreateARoutineComponent implements OnInit {
 
     ngOnInit(): void {
         this.sequenceService.currentSequence.length = 0;
-        console.log(this.orientationService.orientation);
-
+        this.sequenceService.totalDuration = 0;
     }
 
     public selectTime(name: String) {
@@ -90,6 +89,16 @@ export class CreateARoutineComponent implements OnInit {
                 this.sequenceService.removeActivity(id);
             }
         });
+    }
+
+    public getTotalString() {
+        if(this.sequenceService.totalDuration <= 90) {
+            return 'Total: ' + this.sequenceService.totalDuration + 's';
+        }
+        let minutes = Math.floor(this.sequenceService.totalDuration / 60);
+        let seconds = this.sequenceService.totalDuration % 60;
+        return seconds == 0 ? 'Total: ' + minutes + 'min' : 'Total: ' + minutes + 'min + ' + seconds + 's';
+
     }
 
 }

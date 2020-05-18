@@ -1,15 +1,4 @@
 import { Injectable } from '@angular/core';
-import {
-    getBoolean,
-    setBoolean,
-    getNumber,
-    setNumber,
-    getString,
-    setString,
-    hasKey,
-    remove,
-    clear
-} from "tns-core-modules/application-settings";
 import { SqliteService } from './sqlite.service';
 
 @Injectable({
@@ -19,6 +8,7 @@ export class SequenceService {
 
     public currentSequence = [];
     public currentRoutineTitle: string = "New Routine";
+    public totalDuration = 0;
 
     public activities;
 
@@ -34,6 +24,7 @@ export class SequenceService {
 
     public addToSequence(duration: String, name: String) {
         this.currentSequence.push({'duration': duration, 'name': name});
+        this.setTotalDuration();
     }
 
     public getAllActivities() {
@@ -55,6 +46,24 @@ export class SequenceService {
         this.sqlite.executeSql("DELETE FROM activities WHERE id = ?", [id]).then(() => {
             this.getAllActivities();
         });
+    }
+
+    private setTotalDuration() {
+        let duration = 0;
+        this.currentSequence.forEach(item => {
+            switch (item.duration) {
+                case "30s":
+                    duration += 30;
+                    break;
+                case "60s":
+                    duration += 60;
+                    break;
+                case "break":
+                    duration += 5;
+                    break;
+            }
+        });
+        this.totalDuration = duration;
     }
 
 }
