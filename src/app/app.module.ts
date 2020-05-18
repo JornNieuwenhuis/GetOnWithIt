@@ -11,6 +11,7 @@ import { HideActionBarDirective } from './directives/hide-action-bar.directive';
 import { MenuComponent } from './modules/menu/menu.component';
 import { CreateARoutineComponent } from './modules/create-a-routine/create-a-routine.component';
 import { SavedRoutinesComponent } from './modules/saved-routines/saved-routines.component';
+import { OrientationDirective } from './directives/orientation.directive';
 
 // Uncomment and add to NgModule imports if you need to use the HttpClient wrapper
 // import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -30,7 +31,8 @@ import { SavedRoutinesComponent } from './modules/saved-routines/saved-routines.
         HideActionBarDirective,
         MenuComponent,
         CreateARoutineComponent,
-        SavedRoutinesComponent
+        SavedRoutinesComponent,
+        OrientationDirective
     ],
     providers: [],
     schemas: [

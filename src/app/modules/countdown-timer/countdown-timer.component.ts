@@ -13,8 +13,6 @@ export class CountdownTimerComponent {
     public timer: number;
     public currentExercise: string;
     public urgencyClass: string = 'default';
-    private middleMark: number;
-    private urgentMark: number;
 
     constructor(public routingService: RoutingService, public sequenceService: SequenceService) {
 
@@ -30,8 +28,8 @@ export class CountdownTimerComponent {
 
             this.currentExercise = sequence['name'];
             this.timer           = this.sequenceService.durations[sequence['duration']]['seconds'];
-            this.middleMark      = this.sequenceService.durations[sequence['duration']]['middleMark'];
-            this.urgentMark      = this.sequenceService.durations[sequence['duration']]['urgentMark'];
+            let middleMark       = this.sequenceService.durations[sequence['duration']]['middleMark'];
+            let urgentMark       = this.sequenceService.durations[sequence['duration']]['urgentMark'];
 
             if(sequence["name"] != 'break') {
                 for(let i = 5; i >= 0; i--) {
@@ -42,7 +40,7 @@ export class CountdownTimerComponent {
 
             for(let i = this.timer; i >= 1; i--) {
                 this.timer -= 1;
-                this.urgencyClass = sequence['duration'] == 'break' ? 'break' : (this.timer <= this.middleMark ? (this.timer <= this.urgentMark ? 'urgent' : 'middle') : 'default');
+                this.urgencyClass = sequence['duration'] == 'break' ? 'break' : (this.timer <= middleMark ? (this.timer <= urgentMark ? 'urgent' : 'middle') : 'default');
                 await this.delay();
             }
         }

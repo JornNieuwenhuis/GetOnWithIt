@@ -1,0 +1,36 @@
+.container {
+    padding-top: 100px;
+}
+
+.sequence-container-child {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+}
+
+.sequence-container-child StackLayout {
+    height: 90%;
+    width: 90%;
+}
+
+.landscape .sequence-overview-container {
+    height: 300px;
+}
+
+.sequence-overview {
+    background-color: pink;
+}
+
+.sequence-creator {
+    background-color: purple;
+}
+
+.routine-title {
+    color: white;
+    text-align: center;
+}
+
+.list-group-item {
+    font-size: 18px;
+    text-align: center;
+}

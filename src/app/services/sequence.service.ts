@@ -18,6 +18,7 @@ import { SqliteService } from './sqlite.service';
 export class SequenceService {
 
     public currentSequence = [];
+    public currentRoutineTitle: string = "New Routine";
 
     public activities;
 

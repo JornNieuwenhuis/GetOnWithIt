@@ -1,42 +1,109 @@
-<StackLayout>
+<StackLayout
+    class="container"
+    orientation="vertical"
+    horizontalAlignment="center"
+    height="100%" width="100%"
+    [ngClass]="orientationService.orientation"
+    [hideActionBar]>
 
-    <StackLayout>
-        <Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
-    </StackLayout>
+    <GridLayout
+        class="sequence-container"
+        [columns]="orientationService.orientation == 'portrait' ? '*' : '*,*'"
+        [rows]="orientationService.orientation == 'portrait' ? '*,*' : '*'"
+        height="100%"
+        verticalAlignment="center"
+        horizontalAlignment="center" >
 
-    <!-- Times to choose from -->
-    <GridLayout rows="*" columns="*,*,*" height="600px">
-        <Button text="break" column="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
-        <Button text="30s"   column="1" (tap)="selectTime('30s')"     [ngClass]="checkTimeSelection('30s')"></Button>
-        <Button text="60s"   column="2" (tap)="selectTime('60s')"     [ngClass]="checkTimeSelection('60s')"></Button>
-    </GridLayout>
+        <StackLayout
+            class="sequence-container-child"
+            col="0"
+            row="0">
 
-    <!-- List of activities -->
-    <StackLayout height="600px">
-        <ListView [items]="sequenceService.activities" class="list-group">
-            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <GridLayout
-                (tap)="selectActivity(item.name)"
-                (longPress)="removeActivity(item.id, item.name)"
-                [ngClass]="checkActSelection(item.name)">
-                        <Label [text]="item.name" class="list-group-item"></Label>
+            <StackLayout class="sequence-overview" orientation="vertical">
+
+                <AbsoluteLayout
+                    height="100px"
+                    class="routine-title"
+                    horizontalAlignment="center">
+
+                    <Label [text]="sequenceService.currentRoutineTitle"></Label>
+
+                </AbsoluteLayout>
+
+                <!-- Create combinations time-activity for sequence -->
+                <StackLayout [height]="orientationService.orientation == 'portrait' ? '800px' : '650px'" horizontalAlignment="center">
+
+                    <StackLayout *ngIf="sequenceService.currentSequence.length > 0">
+                        <ListView [items]="sequenceService.currentSequence" class="list-sequence" width="100%">
+                            <ng-template let-item="item" let-i="index">
+                                <GridLayout>
+                                    <Label [text]="getString(item.duration, item.name)" class="list-group-item"></Label>
+                                </GridLayout>
+                            </ng-template>
+                        </ListView>
+                    </StackLayout>
+
+                    <StackLayout *ngIf="sequenceService.currentSequence.length == 0">
+                        <Label text="Add activities below to get started!"></Label>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <GridLayout verticalAlignment="bottom" columns="*, *" rows="*">
+                    <Label col="0" text="Total: "></Label>
+                    <Button col="1" text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
                 </GridLayout>
-            </ng-template>
-        </ListView>
-    </StackLayout>
 
-    <!-- Add activity button -->
-    <StackLayout>
-        <Button text="+" (tap)="addActivity()"></Button>
-    </StackLayout>
+            </StackLayout>
 
-    <!-- Create combinations time-activity for sequence (To be removed) -->
-    <GridLayout rows="*" columns="*,*,*" height="100px" *ngFor="let sequence of sequenceService.currentSequence">
-        <StackLayout>
-            <Label [text]="getString(sequence['duration'], sequence['name'])"></Label>
         </StackLayout>
+
+        <StackLayout
+            class="sequence-container-child"
+            [col]="orientationService.orientation == 'portrait' ? '0' : '1'"
+            [row]="orientationService.orientation == 'portrait' ? '1' : '0'"
+            >
+
+            <StackLayout class="sequence-creator">
+
+
+                    <GridLayout columns="*,*" rows="*">
+                        <!-- List of activities -->
+                        <StackLayout col="0">
+                            <!-- Add activity button -->
+                            <AbsoluteLayout class="addActivityButton">
+                                <Button text="+" (tap)="addActivity()"></Button>
+                            </AbsoluteLayout>
+
+                            <ListView [items]="sequenceService.activities" class="list-group">
+
+                                <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                                    <GridLayout
+                                    (tap)="selectActivity(item.name)"
+                                    (longPress)="removeActivity(item.id, item.name)"
+                                    [ngClass]="checkActSelection(item.name)">
+                                        <Label [text]="item.name" class="list-group-item"></Label>
+                                    </GridLayout>
+                                </ng-template>
+
+                            </ListView>
+                        </StackLayout>
+
+                        <!-- Times to choose from -->
+                        <StackLayout col="1">
+                            <GridLayout rows="*, *, *" columns="*">
+                                <Button text="break" row="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
+                                <Button text="30s"   row="1" (tap)="selectTime('30s')"       [ngClass]="checkTimeSelection('30s')"></Button>
+                                <Button text="60s"   row="2" (tap)="selectTime('60s')"       [ngClass]="checkTimeSelection('60s')"></Button>
+                            </GridLayout>
+                        </StackLayout>
+
+                    </GridLayout>
+
+            </StackLayout>
+
+        </StackLayout>
+
     </GridLayout>
 
 </StackLayout>
-
-

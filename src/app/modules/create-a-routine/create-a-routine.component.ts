@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
 import { SequenceService } from '~/app/services/sequence.service';
 import * as dialogs from "tns-core-modules/ui/dialogs";
+import { OrientationService } from '~/app/services/orientation.service';
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -12,13 +13,19 @@ export class CreateARoutineComponent implements OnInit {
 
     public selectedTime: String;
     public selectedAct:  String;
+    public orientation;
 
     constructor(
         public routingService: RoutingService,
-        public sequenceService: SequenceService) { }
+        public sequenceService: SequenceService,
+        public orientationService: OrientationService) {
+
+    }
 
     ngOnInit(): void {
         this.sequenceService.currentSequence.length = 0;
+        console.log(this.orientationService.orientation);
+
     }
 
     public selectTime(name: String) {
@@ -84,4 +91,5 @@ export class CreateARoutineComponent implements OnInit {
             }
         });
     }
+
 }
