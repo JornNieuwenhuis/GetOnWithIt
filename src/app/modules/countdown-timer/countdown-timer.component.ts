@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
 import { SequenceService } from '~/app/services/sequence.service';
+import { OrientationService } from '~/app/services/orientation.service';
 
 @Component({
   selector: 'ns-countdown-timer',
@@ -14,7 +15,7 @@ export class CountdownTimerComponent {
     public currentExercise: string;
     public urgencyClass: string = 'default';
 
-    constructor(public routingService: RoutingService, public sequenceService: SequenceService) {
+    constructor(public routingService: RoutingService, public sequenceService: SequenceService, public orientationService: OrientationService) {
 
     }
 
@@ -23,7 +24,7 @@ export class CountdownTimerComponent {
     }
 
     public async startRoutine() {
-        //TODO: display name of exercise between every exercise for 5 secs
+        this.sequenceService.running = true;
         for(let sequence of this.sequenceService.currentSequence) {
 
             this.currentExercise = sequence['name'];
@@ -44,5 +45,6 @@ export class CountdownTimerComponent {
                 await this.delay();
             }
         }
+        this.sequenceService.running = false;
     }
 }

@@ -1,36 +1,59 @@
 .container {
-    padding-top: 100px;
+    padding-top: 32;
+    background-color: lightseagreen;
 }
 
 .sequence-container-child {
-    background-color: white;
     height: 100%;
     width: 100%;
+    background-color: white;
+    border-radius: 20;
+    border-color: lightseagreen lightseagreen lightseagreen lightseagreen;
+    border-width: 8 8 8 8;
 }
 
 .sequence-container-child StackLayout {
-    height: 90%;
-    width: 90%;
+    height: 95%;
+    width: 95%;
 }
 
-.landscape .sequence-overview-container {
-    height: 300px;
-}
-
-.sequence-overview {
-    background-color: pink;
-}
-
-.sequence-creator {
-    background-color: purple;
-}
-
-.routine-title {
-    color: white;
+.routine-title, .list-sequence-item {
     text-align: center;
 }
 
-.list-group-item {
-    font-size: 18px;
+.list-placeholder {
+    white-space: normal;
     text-align: center;
+}
+
+.total-duration Label {
+    white-space: normal;
+    font-size: 14;
+}
+
+.total-duration {
+    padding: 4;
+}
+
+.times-list {
+    padding-top: 40;
+}
+
+.activity-list-item {
+    text-align: center;
+}
+
+.activity-list GridLayout {
+    padding-left: 10;
+    padding-right: 10;
+}
+
+.start-button Button, .clear-button Button {
+    width: 88;
+    height: 48;
+}
+
+.addActivityButton Button {
+    height: 40;
+    width: 40;
 }

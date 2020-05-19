@@ -10,6 +10,8 @@ export class SequenceService {
     public currentRoutineTitle: string = "New Routine";
     public totalDuration = 0;
 
+    public running: boolean = false;
+
     public activities;
 
     public durations = {
@@ -64,6 +66,11 @@ export class SequenceService {
             }
         });
         this.totalDuration = duration;
+    }
+
+    public clearCurrentSequence() {
+        this.currentSequence.length = 0;
+        this.totalDuration = 0;
     }
 
 }

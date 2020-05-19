@@ -3,6 +3,7 @@ import { RoutingService } from '~/app/services/routing.service';
 import { SequenceService } from '~/app/services/sequence.service';
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { OrientationService } from '~/app/services/orientation.service';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -18,7 +19,8 @@ export class CreateARoutineComponent implements OnInit {
     constructor(
         public routingService: RoutingService,
         public sequenceService: SequenceService,
-        public orientationService: OrientationService) {
+        public orientationService: OrientationService,
+        private page: Page) {
 
     }
 
@@ -30,21 +32,53 @@ export class CreateARoutineComponent implements OnInit {
     public selectTime(name: String) {
         this.selectedTime = name;
         if(this.selectedAct) {
-            this.sequenceService.addToSequence(this.selectedTime, this.selectedAct);
+            this.addToSequence();
             this.clearSelection();
         }
     }
 
     public selectActivity(name: String) {
         if(name == 'break') {
+            this.scrollToBottom();
             this.sequenceService.addToSequence('break', 'break');
             return this.clearSelection();
         }
         this.selectedAct = name;
         if(this.selectedTime) {
-            this.sequenceService.addToSequence(this.selectedTime, this.selectedAct);
+            this.addToSequence();
             this.clearSelection();
         }
+    }
+
+    public async addToSequence() {
+        let activityButton = this.page.getViewById('act' + this.selectedAct);
+        let timeButton = this.page.getViewById(this.selectedTime + 'Button');
+        activityButton.addPseudoClass('highlighted');
+        timeButton.addPseudoClass('highlighted');
+
+        this.sequenceService.addToSequence(this.selectedTime, this.selectedAct);
+
+        await this.confirmDelay().then(() => {
+            activityButton.deletePseudoClass('highlighted');
+            timeButton.deletePseudoClass('highlighted');
+        });
+
+        this.scrollToBottom(true);
+    }
+
+    private confirmDelay() {
+        return new Promise(resolve => setTimeout(resolve, 150));
+    }
+
+    private async scrollToBottom(skipDelay?) {
+        if(skipDelay) {
+            let listView: any = this.page.getViewById('sequence-listview');
+            return listView.scrollToIndex(this.sequenceService.currentSequence.length - 1);
+        }
+        await this.confirmDelay().then(() => {
+            let listView: any = this.page.getViewById('sequence-listview');
+            listView.scrollToIndex(this.sequenceService.currentSequence.length - 1);
+        });
     }
 
     private clearSelection() {

@@ -1,5 +1,11 @@
-<GridLayout class="countdown-timer container" hideActionBar rows="*, auto" [ngClass]="urgencyClass">
-    <StackLayout class="content">
+<GridLayout
+    class="countdown-timer container"
+    [columns]="orientationService.orientation == 'portrait' ? '*' : '2*,*'"
+    [rows]="orientationService.orientation == 'portrait' ? '2*, *' : '*'"
+    [ngClass]="urgencyClass"
+    hideActionBar>
+
+    <StackLayout class="content" col="0" row="0">
 
         <StackLayout class="exercise-title">
             <Label [text]="currentExercise"></Label>
@@ -22,12 +28,14 @@
     </StackLayout>
 
 
-    <StackLayout row="1" height="50">
+    <StackLayout col="1" row="1" orientation="vertical">
 
-        <GridLayout columns="*, *" rows="auto, auto">
-            <Button (tap)="startRoutine()" text="Start" column="0"></Button>
-            <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
-        </GridLayout>
+        <StackLayout verticalAlignment="center">
+            <GridLayout columns="*, *" rows="auto, auto" >
+                <Button *ngIf="!sequenceService.running" (tap)="startRoutine()" text="Start" column="0"></Button>
+                <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
+            </GridLayout>
+        </StackLayout>
 
     </StackLayout>
 </GridLayout>

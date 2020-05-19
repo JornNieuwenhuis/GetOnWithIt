@@ -6,8 +6,9 @@ import { Injectable } from '@angular/core';
 export class OrientationService {
 
     public orientation: string = "portrait";
+    private application=require('application');
 
     constructor() { }
 
-      //TODO: Add function to set orientation!
+    //TODO: Add function to set orientation!
 }

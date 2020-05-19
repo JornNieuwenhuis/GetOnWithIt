@@ -1,1 +1,19 @@
-/* Add mobile styles for the component here.  */
+.create-routine-stack, .saved-routines-stack {
+    height: 100%;
+    width: 50%;
+    vertical-align: center;
+}
+
+.create-routine-stack Label, .saved-routines-stack Label {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.create-routine-stack {
+    background-color: lightseagreen;
+}
+
+.saved-routines-stack {
+    background-color: red;
+}

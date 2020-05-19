@@ -24,6 +24,38 @@ Button.-primary {
     font-size: 18;
 }
 
-Button.selected, GridLayout.selected {
-    background-color: rgba(128, 128, 128, 0.3);
+Button, .activity-list Label {
+    android-elevation: 4;
+    background-color: lightseagreen;
+    border-color: darkolivegreen;
+    border-radius: 20;
+    border-width: 1;
+    color: whitesmoke;
+    font-size: 18;
+    font-weight: bold;
+}
+
+Button:active:not(Button.selected){
+    android-elevation: 8;
+    background-color: whitesmoke;
+    border-color: darkolivegreen;
+    border-width: 1;
+    color: lightseagreen;
+    font-size: 18;
+    font-weight: bold;
+}
+
+
+Label, Button {
+    font-size: 18;
+    font-family: monospace;
+}
+
+Button:highlighted, Label:highlighted {
+    background-color: rgb(38, 219, 210);
+}
+
+Button.selected, .activity-list GridLayout.selected Label {
+    background-color: white;
+    color: lightseagreen;
 }

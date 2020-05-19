@@ -19,6 +19,8 @@
             col="0"
             row="0">
 
+            <!-- Current Sequence Overview block -->
+
             <StackLayout class="sequence-overview" orientation="vertical">
 
                 <StackLayout
@@ -34,31 +36,46 @@
                 <StackLayout [height]="orientationService.orientation == 'portrait' ? '800px' : '650px'" horizontalAlignment="center">
 
                     <StackLayout *ngIf="sequenceService.currentSequence.length > 0">
-                        <ListView [items]="sequenceService.currentSequence" class="list-sequence" width="100%">
+                        <ListView id="sequence-listview" [items]="sequenceService.currentSequence" class="list-sequence" width="100%">
                             <ng-template let-item="item" let-i="index">
                                 <GridLayout>
-                                    <Label [text]="getString(item.duration, item.name)" class="list-group-item"></Label>
+                                    <Label [text]="getString(item.duration, item.name)" class="list-sequence-item"></Label>
                                 </GridLayout>
                             </ng-template>
                         </ListView>
                     </StackLayout>
 
                     <!-- Placeholder -->
-                    <StackLayout *ngIf="sequenceService.currentSequence.length == 0">
-                        <Label text="Add activities below to get started!"></Label>
+                    <StackLayout *ngIf="sequenceService.currentSequence.length == 0" verticalAlignment="center">
+                        <Label class="list-placeholder" text="Add activities to get started!"></Label>
                     </StackLayout>
 
                 </StackLayout>
 
-                <GridLayout verticalAlignment="bottom" columns="*, *" rows="*">
-                    <Label col="0" [text]="getTotalString()"></Label>
-                    <Button col="1" text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
+                <GridLayout verticalAlignment="bottom" columns="*, *, *" rows="*" class="start-button-grid">
+
+                    <!-- Total duration -->
+                    <StackLayout verticalAlignment="bottom" col="0" class="total-duration">
+                        <Label [text]="getTotalString()"></Label>
+                    </StackLayout>
+
+                    <!-- Clear Button -->
+                    <AbsoluteLayout class="clear-button" col="1" *ngIf="sequenceService.currentSequence.length != 0">
+                        <Button text="Clear" class="btn btn-primary" (tap)="sequenceService.clearCurrentSequence()"></Button>
+                    </AbsoluteLayout>
+
+                    <!-- Start Button -->
+                    <AbsoluteLayout class="start-button" col="2" *ngIf="sequenceService.currentSequence.length != 0">
+                        <Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
+                    </AbsoluteLayout>
+
                 </GridLayout>
 
             </StackLayout>
 
         </StackLayout>
 
+        <!-- Sequence Creator block -->
         <StackLayout
             class="sequence-container-child"
             [col]="orientationService.orientation == 'portrait' ? '0' : '1'"
@@ -68,7 +85,7 @@
             <StackLayout class="sequence-creator">
 
 
-                    <GridLayout columns="*,*" rows="*">
+                    <GridLayout columns="2*,*" rows="*">
                         <!-- List of activities -->
                         <StackLayout col="0">
                             <!-- Add activity button -->
@@ -76,14 +93,14 @@
                                 <Button text="+" (tap)="addActivity()"></Button>
                             </AbsoluteLayout>
 
-                            <ListView [items]="sequenceService.activities" class="list-group">
+                            <ListView [items]="sequenceService.activities" class="activity-list">
 
                                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                                     <GridLayout
                                     (tap)="selectActivity(item.name)"
                                     (longPress)="removeActivity(item.id, item.name)"
                                     [ngClass]="checkActSelection(item.name)">
-                                        <Label [text]="item.name" class="list-group-item"></Label>
+                                        <Label [id]="'act' + item.name" [text]="item.name" class="activity-list-item"></Label>
                                     </GridLayout>
                                 </ng-template>
 
@@ -92,10 +109,10 @@
 
                         <!-- Times to choose from -->
                         <StackLayout col="1">
-                            <GridLayout rows="*, *, *" columns="*">
-                                <Button text="break" row="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
-                                <Button text="30s"   row="1" (tap)="selectTime('30s')"       [ngClass]="checkTimeSelection('30s')"></Button>
-                                <Button text="60s"   row="2" (tap)="selectTime('60s')"       [ngClass]="checkTimeSelection('60s')"></Button>
+                            <GridLayout rows="80, 80, 80" columns="*" class="times-list">
+                                <Button id="breakButton" text="break" row="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
+                                <Button id="30sButton"   text="30s"   row="1" (tap)="selectTime('30s')"       [ngClass]="checkTimeSelection('30s')"></Button>
+                                <Button id="60sButton"   text="60s"   row="2" (tap)="selectTime('60s')"       [ngClass]="checkTimeSelection('60s')"></Button>
                             </GridLayout>
                         </StackLayout>
 

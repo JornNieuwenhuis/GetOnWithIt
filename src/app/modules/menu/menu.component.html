@@ -1,8 +1,8 @@
-<StackLayout row="1" height="50">
-
-    <GridLayout columns="*, *" rows="auto, auto">
-        <Button (tap)="routingService.navigateToUrl('/createARoutine')" text="Create a Routine" column="0"></Button>
-        <Button (tap)="routingService.navigateToUrl('/savedRoutines')" text="Saved Routines" column="1"></Button>
-    </GridLayout>
-
+<StackLayout orientation="horizontal">
+    <StackLayout class="create-routine-stack"  (touch)="routingService.navigateToUrl('/createARoutine')">
+        <Label text="Create a Routine"></Label>
+    </StackLayout>
+    <StackLayout class="saved-routines-stack" (touch)="routingService.navigateToUrl('/savedRoutines')">
+        <Label text="Saved Routines"></Label>
+    </StackLayout>
 </StackLayout>

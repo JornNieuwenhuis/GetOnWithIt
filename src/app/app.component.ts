@@ -29,8 +29,6 @@ export class AppComponent {
     public orientationChanged(orientation) {
         this.orientationService.orientation = orientation;
         this.changeDetRef.detectChanges();
-        console.log(this.orientationService.orientation);
-
     }
 
 }
