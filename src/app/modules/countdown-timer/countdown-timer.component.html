@@ -32,7 +32,7 @@
 
         <StackLayout verticalAlignment="center">
             <GridLayout columns="*, *" rows="auto, auto" >
-                <Button *ngIf="!sequenceService.running" (tap)="startRoutine()" text="Start" column="0"></Button>
+                <Button *ngIf="!routineService.running" (tap)="startRoutine()" text="Start" column="0"></Button>
                 <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
             </GridLayout>
         </StackLayout>

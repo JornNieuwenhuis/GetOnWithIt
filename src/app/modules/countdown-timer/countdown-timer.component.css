@@ -1,21 +1,21 @@
 .container.default {
-    background-color: lightgreen;
+    background-color: #C1D37F;
 }
 
 .container.urgent {
-    background-color: red;
+    background-color: #F4442E;
 }
 
 .container.middle {
-    background-color: orange;
+    background-color: #FC9E4F;
 }
 
 .container.break {
-    background-color: cornflowerblue;
+    background-color: #F6E27F;
 }
 
 .container.changeTime {
-    background-color: blueviolet;
+    background-color: #F6E27F;
 }
 
 .container.changeTime .exercise-title{

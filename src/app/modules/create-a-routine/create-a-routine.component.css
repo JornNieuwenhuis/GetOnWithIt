@@ -1,24 +1,28 @@
 .container {
     padding-top: 32;
-    background-color: lightseagreen;
+    background-color: #8AA399;
 }
 
-.sequence-container-child {
+.routine-container-child {
     height: 100%;
     width: 100%;
     background-color: white;
     border-radius: 20;
-    border-color: lightseagreen lightseagreen lightseagreen lightseagreen;
+    border-color: #8AA399 #8AA399 #8AA399 #8AA399;
     border-width: 8 8 8 8;
 }
 
-.sequence-container-child StackLayout {
+.routine-container-child StackLayout {
     height: 95%;
     width: 95%;
 }
 
-.routine-title, .list-sequence-item {
+.routine-title, .list-routine-item {
     text-align: center;
+}
+
+.routine-title {
+    margin-left: -56;
 }
 
 .list-placeholder {
@@ -48,12 +52,25 @@
     padding-right: 10;
 }
 
-.start-button Button, .clear-button Button {
-    width: 88;
-    height: 48;
+.start-button Button {
+    background-color: #C1D37F;
 }
 
-.addActivityButton Button {
+.start-button Button, .clear-button Button {
+    width: 88;
+    height: 40;
+}
+
+.addActivityButton Button, .saveButton Button {
     height: 40;
     width: 40;
+}
+
+.saveButton Button {
+    font-size: 12;
+}
+
+.saveButton {
+    margin-top: 8;
+    width: 56;
 }

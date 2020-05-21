@@ -18,10 +18,10 @@ export class AppComponent {
                     console.log("CREATE TABLE ERROR", error);
                 });
 
-/*                 db.execSQL("CREATE TABLE IF NOT EXISTS routines (id INTEGER PRIMARY KEY AUTOINCREMENT, act_id INTEGER, duration TEXT)").then(() => {
+                db.execSQL("CREATE TABLE IF NOT EXISTS routines (id INTEGER PRIMARY KEY AUTOINCREMENT, routine_name VARCHAR, act_name VARCHAR, duration VARCHAR)").then(() => {
                 }, error => {
                     console.log("CREATE TABLE ERROR", error);
-                }); */
+                });
 
             });
     }

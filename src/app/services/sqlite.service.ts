@@ -6,7 +6,11 @@ var Sqlite = require("nativescript-sqlite");
 })
 export class SqliteService {
 
+    public resultArray = [];
+
     /* https://medium.com/@kumarandena/nativescript-groceries-app-using-sqlite-1018df947601 */
+
+    constructor() { }
 
     public getDbConnection() {
         return new Sqlite('activities');
@@ -34,7 +38,7 @@ export class SqliteService {
             )
         });
     });
-    return promise;
+        return promise;
     }
 
     public executeSql(statement: String, variables: Array<any>) {
@@ -52,6 +56,83 @@ export class SqliteService {
             });
         });
         return promise;
+    }
+
+    public rawQuery(query, params) {
+        let promise = new Promise((resolve, reject) => {
+        this.getDbConnection().then(db => {
+            db.all(query, params)
+            .then(
+                result => { // Success
+                    resolve(result);
+                },
+                reject => { // Fail
+                    console.log(reject);
+                }
+            )
+        });
+    });
+        return promise;
+    }
+
+    public queryEachCurrentRoutine(query, params) {
+        this.resultArray = [];
+        let promise = new Promise((resolve, reject) => {
+        this.getDbConnection().then(db => {
+            db.each(query, params, this.getCurrentRoutineFromDbCallback.bind(this), null, null)
+            .then(
+                result => { // Success
+                    result = this.resultArray;
+                    resolve(result);
+                },
+                reject => { // Fail
+                    console.log(reject);
+                }
+            )});
+        });
+        return promise;
+    }
+
+    public getCurrentRoutineFromDbCallback(unused, data) {
+        this.resultArray.push({ 'name': data[0], 'duration': data[1] });
+    }
+
+    public queryEachSavedRoutines(query, params) {
+        this.resultArray = [];
+        let promise = new Promise((resolve, reject) => {
+        this.getDbConnection().then(db => {
+            db.each(query, params, this.getSavedRoutinesCallback.bind(this), null, null)
+            .then(
+                result => { // Success
+                    result = this.resultArray;
+                    resolve(result);
+                },
+                reject => { // Fail
+                    console.log(reject);
+                }
+            )});
+        });
+        return promise;
+    }
+
+    public getSavedRoutinesCallback(unused, data) {
+        if(!data) return;
+        let routineName = data[1];
+        if (!this.resultArray.find(o => o.routineName === routineName)) {
+            this.resultArray.push({'routineName': data[1], 'activities': []});
+        }
+
+        this.resultArray.forEach(routine => {
+            if(routine.routineName == routineName) {
+                routine.activities.push(
+                    {
+                        'id': data[0],
+                        'name': data[2],
+                        'duration': data[3]
+                    }
+                );
+            }
+        });
     }
 
 }

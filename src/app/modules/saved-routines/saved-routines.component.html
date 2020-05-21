@@ -1,1 +1,9 @@
-<Button text="saved-routines works!" class="btn btn-primary"></Button>
+<StackLayout>
+    <ListView id="routine-listview" [items]="routineService.savedRoutines" class="list-routine" width="100%">
+        <ng-template let-routine="item" let-i="index">
+            <GridLayout>
+                <Label [text]="routine.routineName"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+</StackLayout>

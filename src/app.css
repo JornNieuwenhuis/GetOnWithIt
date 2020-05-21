@@ -26,7 +26,7 @@ Button.-primary {
 
 Button, .activity-list Label {
     android-elevation: 4;
-    background-color: lightseagreen;
+    background-color: #8AA399;
     border-color: darkolivegreen;
     border-radius: 20;
     border-width: 1;
@@ -40,11 +40,10 @@ Button:active:not(Button.selected){
     background-color: whitesmoke;
     border-color: darkolivegreen;
     border-width: 1;
-    color: lightseagreen;
+    color: #8AA399;
     font-size: 18;
     font-weight: bold;
 }
-
 
 Label, Button {
     font-size: 18;
@@ -52,10 +51,10 @@ Label, Button {
 }
 
 Button:highlighted, Label:highlighted {
-    background-color: rgb(38, 219, 210);
+    background-color: #C1D37F;
 }
 
 Button.selected, .activity-list GridLayout.selected Label {
-    background-color: white;
-    color: lightseagreen;
+    background-color: #F6e27F;
+    color: #C1D37F;
 }

@@ -7,7 +7,7 @@
     [hideActionBar]>
 
     <GridLayout
-        class="sequence-container"
+        class="routine-container"
         [columns]="orientationService.orientation == 'portrait' ? '*' : '*,*'"
         [rows]="orientationService.orientation == 'portrait' ? '*,*' : '*'"
         height="100%"
@@ -15,38 +15,45 @@
         horizontalAlignment="center" >
 
         <StackLayout
-            class="sequence-container-child"
+            class="routine-container-child"
             col="0"
             row="0">
 
-            <!-- Current Sequence Overview block -->
+            <!-- Current routine Overview block -->
+            <StackLayout class="routine-overview" orientation="vertical">
 
-            <StackLayout class="sequence-overview" orientation="vertical">
+                <GridLayout columns="56, *" rows="*" height="56">
+                    <!-- Save routine button -->
+                    <AbsoluteLayout class="saveButton" col="0">
+                        <Button text="sa ve" (tap)="saveCurrentRoutineAsName()"></Button>
+                    </AbsoluteLayout>
 
-                <StackLayout
-                    height="100px"
-                    class="routine-title"
-                    horizontalAlignment="center">
+                    <!-- Current routine title -->
+                    <StackLayout
+                        height="100px"
+                        class="routine-title"
+                        col="1">
 
-                    <Label [text]="sequenceService.currentRoutineTitle"></Label>
+                        <Label [text]="routineService.currentRoutineTitle"></Label>
 
-                </StackLayout>
+                    </StackLayout>
+                </GridLayout>
 
-                <!-- Create combinations time-activity for sequence -->
-                <StackLayout [height]="orientationService.orientation == 'portrait' ? '800px' : '650px'" horizontalAlignment="center">
+                <!-- Create combinations time-activity for routine -->
+                <StackLayout [height]="orientationService.orientation == 'portrait' ? '760px' : '650px'" horizontalAlignment="center">
 
-                    <StackLayout *ngIf="sequenceService.currentSequence.length > 0">
-                        <ListView id="sequence-listview" [items]="sequenceService.currentSequence" class="list-sequence" width="100%">
+                    <StackLayout *ngIf="routineService.currentRoutine.length > 0">
+                        <ListView id="routine-listview" [items]="routineService.currentRoutine" class="list-routine" width="100%">
                             <ng-template let-item="item" let-i="index">
                                 <GridLayout>
-                                    <Label [text]="getString(item.duration, item.name)" class="list-sequence-item"></Label>
+                                    <Label [text]="getString(item.duration, item.name)" class="list-routine-item"></Label>
                                 </GridLayout>
                             </ng-template>
                         </ListView>
                     </StackLayout>
 
                     <!-- Placeholder -->
-                    <StackLayout *ngIf="sequenceService.currentSequence.length == 0" verticalAlignment="center">
+                    <StackLayout *ngIf="routineService.currentRoutine.length == 0" verticalAlignment="center">
                         <Label class="list-placeholder" text="Add activities to get started!"></Label>
                     </StackLayout>
 
@@ -60,13 +67,13 @@
                     </StackLayout>
 
                     <!-- Clear Button -->
-                    <AbsoluteLayout class="clear-button" col="1" *ngIf="sequenceService.currentSequence.length != 0">
-                        <Button text="Clear" class="btn btn-primary" (tap)="sequenceService.clearCurrentSequence()"></Button>
+                    <AbsoluteLayout class="clear-button" col="1" *ngIf="routineService.currentRoutine.length != 0">
+                        <Button text="Clear" class="btn btn-primary" (tap)="routineService.clearCurrentRoutine(true)"></Button>
                     </AbsoluteLayout>
 
                     <!-- Start Button -->
-                    <AbsoluteLayout class="start-button" col="2" *ngIf="sequenceService.currentSequence.length != 0">
-                        <Button text="Start" class="btn btn-primary" (tap)="routingService.navigateToUrl(['/countdowntimer'])"></Button>
+                    <AbsoluteLayout class="start-button" col="2" *ngIf="routineService.currentRoutine.length != 0">
+                        <Button text="Start" class="btn btn-primary" (tap)="routing.navigateToUrl(['/countdowntimer'])"></Button>
                     </AbsoluteLayout>
 
                 </GridLayout>
@@ -75,25 +82,27 @@
 
         </StackLayout>
 
-        <!-- Sequence Creator block -->
+        <!-- routine Creator block -->
         <StackLayout
-            class="sequence-container-child"
+            class="routine-container-child"
             [col]="orientationService.orientation == 'portrait' ? '0' : '1'"
             [row]="orientationService.orientation == 'portrait' ? '1' : '0'"
             >
 
-            <StackLayout class="sequence-creator">
+            <StackLayout class="routine-creator">
 
 
                     <GridLayout columns="2*,*" rows="*">
+
                         <!-- List of activities -->
                         <StackLayout col="0">
+
                             <!-- Add activity button -->
                             <AbsoluteLayout class="addActivityButton">
                                 <Button text="+" (tap)="addActivity()"></Button>
                             </AbsoluteLayout>
 
-                            <ListView [items]="sequenceService.activities" class="activity-list">
+                            <ListView [items]="routineService.activities" class="activity-list">
 
                                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                                     <GridLayout

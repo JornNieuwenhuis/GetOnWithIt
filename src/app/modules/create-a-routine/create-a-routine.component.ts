@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
-import { SequenceService } from '~/app/services/sequence.service';
+import { RoutineService } from '~/app/services/routine.service';
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { OrientationService } from '~/app/services/orientation.service';
 import { Page } from 'tns-core-modules/ui/page/page';
@@ -17,46 +17,46 @@ export class CreateARoutineComponent implements OnInit {
     public orientation;
 
     constructor(
-        public routingService: RoutingService,
-        public sequenceService: SequenceService,
+        public routing: RoutingService,
+        public routineService: RoutineService,
         public orientationService: OrientationService,
         private page: Page) {
 
     }
 
     ngOnInit(): void {
-        this.sequenceService.currentSequence.length = 0;
-        this.sequenceService.totalDuration = 0;
+        this.routineService.currentRoutine.length = 0;
+        this.routineService.totalDuration = 0;
+        this.routineService.getCurrentRoutineFromDb();
     }
 
     public selectTime(name: String) {
         this.selectedTime = name;
         if(this.selectedAct) {
-            this.addToSequence();
-            this.clearSelection();
+            this.addToRoutine();
         }
     }
 
     public selectActivity(name: String) {
         if(name == 'break') {
             this.scrollToBottom();
-            this.sequenceService.addToSequence('break', 'break');
-            return this.clearSelection();
+            return this.routineService.addToRoutine('break', 'break');
         }
         this.selectedAct = name;
         if(this.selectedTime) {
-            this.addToSequence();
-            this.clearSelection();
+            this.addToRoutine();
         }
     }
 
-    public async addToSequence() {
+    public async addToRoutine() {
         let activityButton = this.page.getViewById('act' + this.selectedAct);
-        let timeButton = this.page.getViewById(this.selectedTime + 'Button');
+        let timeButton     = this.page.getViewById(this.selectedTime + 'Button');
+
+        this.routineService.addToRoutine(this.selectedTime, this.selectedAct);
+        this.clearSelection();
+
         activityButton.addPseudoClass('highlighted');
         timeButton.addPseudoClass('highlighted');
-
-        this.sequenceService.addToSequence(this.selectedTime, this.selectedAct);
 
         await this.confirmDelay().then(() => {
             activityButton.deletePseudoClass('highlighted');
@@ -72,12 +72,12 @@ export class CreateARoutineComponent implements OnInit {
 
     private async scrollToBottom(skipDelay?) {
         if(skipDelay) {
-            let listView: any = this.page.getViewById('sequence-listview');
-            return listView.scrollToIndex(this.sequenceService.currentSequence.length - 1);
+            let listView: any = this.page.getViewById('routine-listview');
+            return listView.scrollToIndex(this.routineService.currentRoutine.length - 1);
         }
         await this.confirmDelay().then(() => {
-            let listView: any = this.page.getViewById('sequence-listview');
-            listView.scrollToIndex(this.sequenceService.currentSequence.length - 1);
+            let listView: any = this.page.getViewById('routine-listview');
+            listView.scrollToIndex(this.routineService.currentRoutine.length - 1);
         });
     }
 
@@ -108,7 +108,7 @@ export class CreateARoutineComponent implements OnInit {
             cancelButtonText: "Cancel"
         }).then(input => {
             if(input.result) {
-                this.sequenceService.addActivity(input.text);
+                this.routineService.saveActivity(input.text);
             }
         });
     }
@@ -120,19 +120,31 @@ export class CreateARoutineComponent implements OnInit {
             cancelButtonText: "Cancel"
         }).then(input => {
             if(input.result) {
-                this.sequenceService.removeActivity(id);
+                this.routineService.removeActivity(id);
             }
         });
     }
 
     public getTotalString() {
-        if(this.sequenceService.totalDuration <= 90) {
-            return 'Total: ' + this.sequenceService.totalDuration + 's';
+        if(this.routineService.totalDuration <= 90) {
+            return 'Total: ' + this.routineService.totalDuration + 's';
         }
-        let minutes = Math.floor(this.sequenceService.totalDuration / 60);
-        let seconds = this.sequenceService.totalDuration % 60;
+        let minutes = Math.floor(this.routineService.totalDuration / 60);
+        let seconds = this.routineService.totalDuration % 60;
         return seconds == 0 ? 'Total: ' + minutes + 'min' : 'Total: ' + minutes + 'min + ' + seconds + 's';
 
+    }
+
+    public saveCurrentRoutineAsName() {
+        dialogs.prompt({
+            title: "Name your routine: ",
+            okButtonText: "OK",
+            cancelButtonText: "Cancel"
+        }).then(input => {
+            if(input.result) {
+                this.routineService.saveCurrentRoutineAsName(input.text);
+            }
+        });
     }
 
 }

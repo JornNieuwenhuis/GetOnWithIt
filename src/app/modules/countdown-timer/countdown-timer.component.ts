@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
-import { SequenceService } from '~/app/services/sequence.service';
 import { OrientationService } from '~/app/services/orientation.service';
+import { RoutineService } from '~/app/services/routine.service';
 
 @Component({
   selector: 'ns-countdown-timer',
@@ -15,7 +15,7 @@ export class CountdownTimerComponent {
     public currentExercise: string;
     public urgencyClass: string = 'default';
 
-    constructor(public routingService: RoutingService, public sequenceService: SequenceService, public orientationService: OrientationService) {
+    constructor(public routingService: RoutingService, public routineService: RoutineService, public orientationService: OrientationService) {
 
     }
 
@@ -24,15 +24,15 @@ export class CountdownTimerComponent {
     }
 
     public async startRoutine() {
-        this.sequenceService.running = true;
-        for(let sequence of this.sequenceService.currentSequence) {
+        this.routineService.running = true;
+        for(let routine of this.routineService.currentRoutine) {
 
-            this.currentExercise = sequence['name'];
-            this.timer           = this.sequenceService.durations[sequence['duration']]['seconds'];
-            let middleMark       = this.sequenceService.durations[sequence['duration']]['middleMark'];
-            let urgentMark       = this.sequenceService.durations[sequence['duration']]['urgentMark'];
+            this.currentExercise = routine['name'];
+            this.timer           = this.routineService.durations[routine['duration']]['seconds'];
+            let middleMark       = this.routineService.durations[routine['duration']]['middleMark'];
+            let urgentMark       = this.routineService.durations[routine['duration']]['urgentMark'];
 
-            if(sequence["name"] != 'break') {
+            if(routine["name"] != 'break') {
                 for(let i = 5; i >= 0; i--) {
                     this.urgencyClass = 'changeTime';
                     await this.delay();
@@ -41,10 +41,10 @@ export class CountdownTimerComponent {
 
             for(let i = this.timer; i >= 1; i--) {
                 this.timer -= 1;
-                this.urgencyClass = sequence['duration'] == 'break' ? 'break' : (this.timer <= middleMark ? (this.timer <= urgentMark ? 'urgent' : 'middle') : 'default');
+                this.urgencyClass = routine['duration'] == 'break' ? 'break' : (this.timer <= middleMark ? (this.timer <= urgentMark ? 'urgent' : 'middle') : 'default');
                 await this.delay();
             }
         }
-        this.sequenceService.running = false;
+        this.routineService.running = false;
     }
 }
