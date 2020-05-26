@@ -3,6 +3,12 @@ import { RoutingService } from '~/app/services/routing.service';
 import { OrientationService } from '~/app/services/orientation.service';
 import { RoutineService } from '~/app/services/routine.service';
 
+var sound = require("nativescript-sound");
+const sounds = {
+    "lastFive": sound.create('~/app/media/audio/lastFive.mp3'),
+    "go": sound.create('~/app/media/audio/go.mp3')
+};
+
 @Component({
   selector: 'ns-countdown-timer',
   templateUrl: './countdown-timer.component.html',
@@ -15,17 +21,23 @@ export class CountdownTimerComponent {
     public currentExercise: string;
     public urgencyClass: string = 'default';
 
-    constructor(public routingService: RoutingService, public routineService: RoutineService, public orientationService: OrientationService) {
+    constructor(
+        public routingService: RoutingService,
+        public routineService: RoutineService,
+        public orientationService: OrientationService
+    ) {
 
     }
 
     private delay() {
-        return new Promise(resolve => setTimeout(resolve, 100));
+        return new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     public async startRoutine() {
         this.routineService.running = true;
         for(let routine of this.routineService.currentRoutine) {
+
+            sounds["go"].play();
 
             this.currentExercise = routine['name'];
             this.timer           = this.routineService.durations[routine['duration']]['seconds'];
@@ -42,6 +54,9 @@ export class CountdownTimerComponent {
             for(let i = this.timer; i >= 1; i--) {
                 this.timer -= 1;
                 this.urgencyClass = routine['duration'] == 'break' ? 'break' : (this.timer <= middleMark ? (this.timer <= urgentMark ? 'urgent' : 'middle') : 'default');
+                if(this.timer == 4) {
+                    sounds["lastFive"].play();
+                }
                 await this.delay();
             }
         }

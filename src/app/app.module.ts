@@ -12,6 +12,7 @@ import { MenuComponent } from './modules/menu/menu.component';
 import { CreateARoutineComponent } from './modules/create-a-routine/create-a-routine.component';
 import { SavedRoutinesComponent } from './modules/saved-routines/saved-routines.component';
 import { OrientationDirective } from './directives/orientation.directive';
+import { DialogPreviewComponent } from './util/modal-dialog/dialog-preview/dialog-preview.component';
 
 // Uncomment and add to NgModule imports if you need to use the HttpClient wrapper
 // import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -32,8 +33,10 @@ import { OrientationDirective } from './directives/orientation.directive';
         MenuComponent,
         CreateARoutineComponent,
         SavedRoutinesComponent,
-        OrientationDirective
+        OrientationDirective,
+        DialogPreviewComponent
     ],
+    entryComponents: [DialogPreviewComponent],
     providers: [],
     schemas: [
         NO_ERRORS_SCHEMA

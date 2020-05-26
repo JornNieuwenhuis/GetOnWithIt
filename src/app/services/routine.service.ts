@@ -121,7 +121,25 @@ export class RoutineService {
             [])
             .then(result => {
             this.savedRoutines = result;
-            console.log(this.savedRoutines);
+        });
+    }
+
+    public setAsCurrentRoutine(routineName: string) {
+        this.currentRoutine = this.getActivitiesFromSavedRoutines(routineName);
+        this.saveCurrentRoutine();
+    }
+
+    public getActivitiesFromSavedRoutines(routineName: string) {
+        for(let i = 0; i < this.savedRoutines.length; i++) {
+            if(this.savedRoutines[i]['routineName'] === routineName) {
+                return this.savedRoutines[i]['activities'];
+            }
+        }
+    }
+
+    public deleteRoutineFromDb(routineName) {
+        return this.sqlite.executeSql("DELETE FROM routines WHERE routine_name = ?", [routineName]).then(() => {
+            this.getSavedRoutines();
         });
     }
 

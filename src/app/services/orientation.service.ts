@@ -5,10 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class OrientationService {
 
-    public orientation: string = "portrait";
-    private application=require('application');
+    public orientation;
+    private application = require('application');
+    private activity;
 
-    constructor() { }
+
+    constructor() {
+        this.activity = this.application.android.foregroundActivity;
+        this.orientation = this.activity.getResources().getConfiguration().orientation == 2 ? "landscape" : "portrait";
+    }
 
     //TODO: Add function to set orientation!
 }

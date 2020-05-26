@@ -1,0 +1,18 @@
+<StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
+
+    <ListView id="routine-listview" [items]="activities" class="routine-preview" width="100%" height="300">
+        <ng-template let-act="item" let-i="index">
+            <GridLayout>
+                <Label [text]="getActivityString(act.duration, act.name)"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+
+    <Label [text]="prompt"></Label>
+    <StackLayout orientation="horizontal" marginTop="12">
+        <Button text="ok" (tap)="close('ok')"></Button>
+        <Button text="cancel" (tap)="close('cancel')"></Button>
+        <Button text="delete" (tap)="close('delete')"></Button>
+    </StackLayout>
+
+</StackLayout>

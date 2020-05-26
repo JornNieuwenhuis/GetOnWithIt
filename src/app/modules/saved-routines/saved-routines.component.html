@@ -1,7 +1,7 @@
 <StackLayout>
     <ListView id="routine-listview" [items]="routineService.savedRoutines" class="list-routine" width="100%">
         <ng-template let-routine="item" let-i="index">
-            <GridLayout>
+            <GridLayout (tap)="setAsCurrentRoutine(routine.routineName)">
                 <Label [text]="routine.routineName"></Label>
             </GridLayout>
         </ng-template>
