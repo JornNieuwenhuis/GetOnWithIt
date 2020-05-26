@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
 import { OrientationService } from '~/app/services/orientation.service';
 import { RoutineService } from '~/app/services/routine.service';
@@ -29,6 +29,12 @@ export class CountdownTimerComponent {
 
     }
 
+    //Used to ensure sounds stop playing when navigating away
+    @HostListener('unloaded')
+    pageDestroy() {
+        this.routineService.running = false;
+    }
+
     private delay() {
         return new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -45,13 +51,20 @@ export class CountdownTimerComponent {
             let urgentMark       = this.routineService.durations[routine['duration']]['urgentMark'];
 
             if(routine["name"] != 'break') {
-                for(let i = 5; i >= 0; i--) {
+                for(let i = 3; i >= 0; i--) {
                     this.urgencyClass = 'changeTime';
                     await this.delay();
                 }
             }
 
             for(let i = this.timer; i >= 1; i--) {
+
+                //To stop timer on navigate away
+                if(!this.routineService.running) {
+                    //TODO: Find way to stop async function
+                    return;
+                }
+
                 this.timer -= 1;
                 this.urgencyClass = routine['duration'] == 'break' ? 'break' : (this.timer <= middleMark ? (this.timer <= urgentMark ? 'urgent' : 'middle') : 'default');
                 if(this.timer == 4) {

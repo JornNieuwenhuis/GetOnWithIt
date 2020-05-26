@@ -1,11 +1,11 @@
 <GridLayout
     class="countdown-timer container"
-    [columns]="orientationService.orientation == 'portrait' ? '*' : '2*,*'"
-    [rows]="orientationService.orientation == 'portrait' ? '2*, *' : '*'"
+    [columns]="orientationService.orientation == 'portrait' ? '*' : '2*,auto'"
+    [rows]="orientationService.orientation == 'portrait' ? '2*, auto' : '*'"
     [ngClass]="urgencyClass"
     hideActionBar>
 
-    <StackLayout class="content" col="0" row="0">
+    <StackLayout class="content" col="0" row="0" [ngClass]="orientationService.orientation">
 
         <StackLayout class="exercise-title">
             <Label [text]="currentExercise"></Label>
@@ -31,9 +31,12 @@
     <StackLayout col="1" row="1" orientation="vertical">
 
         <StackLayout verticalAlignment="center">
-            <GridLayout columns="*, *" rows="auto, auto" >
-                <Button *ngIf="!routineService.running" (tap)="startRoutine()" text="Start" column="0"></Button>
-                <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" column="1"></Button>
+            <GridLayout
+                [columns]="orientationService.orientation == 'portrait' ? '*, *' : '*'"
+                [rows]="orientationService.orientation == 'portrait' ? '*' : '*,*'">
+
+                <Button *ngIf="!routineService.running" (tap)="startRoutine()" text="Start" col="0" [row]="orientationService.orientation == 'portrait' ? '0' : '1'"></Button>
+                <Button (tap)="routingService.navigateToUrl(['/menu'])" text="Back" col="1" row="0"></Button>
             </GridLayout>
         </StackLayout>
 

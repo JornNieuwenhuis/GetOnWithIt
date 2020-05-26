@@ -18,10 +18,6 @@
     background-color: #F6E27F;
 }
 
-.container.changeTime .exercise-title{
-    padding-top: 600;
-}
-
 .content {
     text-align: center;
     font-size: 240;
@@ -30,10 +26,23 @@
     height: 100%;
 }
 
-.exercise-title {
+.content.landscape {
+    padding-top: 0;
+    margin-right: -50;
+}
+
+.exercise-title Label {
     font-size: 80;
 }
 
-.content .countdown-single, .content .countdown-zero {
+.content .countdown-double Label {
+    font-size: 180;
+}
+
+.content.landscape .countdown-single Label, .content.landscape .countdown-zero Label {
+    font-size: 180;
+}
+
+.content .countdown-single Label, .content .countdown-zero Label {
     font-size: 360;
 }

@@ -12,7 +12,9 @@ export class OrientationService {
 
     constructor() {
         this.activity = this.application.android.foregroundActivity;
-        this.orientation = this.activity.getResources().getConfiguration().orientation == 2 ? "landscape" : "portrait";
+        if(this.activity != undefined) {
+            this.orientation = this.activity.getResources().getConfiguration().orientation == 2 ? "landscape" : "portrait";
+        }
     }
 
     //TODO: Add function to set orientation!
