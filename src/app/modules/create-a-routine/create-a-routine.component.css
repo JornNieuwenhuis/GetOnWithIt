@@ -6,10 +6,10 @@
 .routine-container-child {
     height: 100%;
     width: 100%;
-    background-color: white;
+    background-color: whitesmoke;
     border-radius: 20;
     border-color: #8AA399 #8AA399 #8AA399 #8AA399;
-    border-width: 8 8 8 8;
+    border-width: 4 4 8 4;
 }
 
 .routine-container-child StackLayout {

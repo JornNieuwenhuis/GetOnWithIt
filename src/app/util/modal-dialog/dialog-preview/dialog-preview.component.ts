@@ -15,7 +15,6 @@ export class DialogPreviewComponent {
 
     constructor(private params: ModalDialogParams) {
         this.prompt = params.context.prompt;
-        this.type   = params.context.type;
         this.activities = params.context.activities;
     }
 

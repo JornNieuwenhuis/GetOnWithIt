@@ -4,7 +4,6 @@ import { RoutingService } from '~/app/services/routing.service';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { DialogPreviewComponent } from '~/app/util/modal-dialog/dialog-preview/dialog-preview.component';
 
-
 @Component({
   selector: 'ns-saved-routines',
   templateUrl: './saved-routines.component.html',
@@ -42,7 +41,10 @@ export class SavedRoutinesComponent implements OnInit {
         this.modalService.showModal(DialogPreviewComponent, options).then((result: string) => {
                 if(result === 'ok') {
                     this.routineService.setAsCurrentRoutine(routineName);
-                    this.routing.navigateToUrl('/createARoutine');
+                    //Timeout fixes issue where modal is still displayed after navigation
+                    setTimeout(() => {
+                        this.routing.navigateToUrl('/countdowntimer');
+                    }, 1);
                 }
                 if(result === 'delete') {
                     this.routineService.deleteRoutineFromDb(routineName);

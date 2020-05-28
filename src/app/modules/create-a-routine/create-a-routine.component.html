@@ -68,7 +68,7 @@
 
                     <!-- Clear Button -->
                     <AbsoluteLayout class="clear-button" col="1" *ngIf="routineService.currentRoutine.length != 0">
-                        <Button text="Clear" class="btn btn-primary" (tap)="routineService.clearCurrentRoutine(true)"></Button>
+                        <Button text="Clear" class="btn btn-primary" (tap)="clearCurrentRoutine(true)"></Button>
                     </AbsoluteLayout>
 
                     <!-- Start Button -->

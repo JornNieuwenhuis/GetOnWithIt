@@ -18,7 +18,7 @@ export class AppComponent {
                     console.log("CREATE TABLE ERROR", error);
                 });
 
-                db.execSQL("CREATE TABLE IF NOT EXISTS routines (id INTEGER PRIMARY KEY AUTOINCREMENT, routine_name VARCHAR, act_name VARCHAR, duration VARCHAR)").then(() => {
+                db.execSQL("CREATE TABLE IF NOT EXISTS routines (id INTEGER PRIMARY KEY AUTOINCREMENT, routine_name VARCHAR, act_name VARCHAR, duration VARCHAR, active BIT NOT NULL DEFAULT 0)").then(() => {
                 }, error => {
                     console.log("CREATE TABLE ERROR", error);
                 });

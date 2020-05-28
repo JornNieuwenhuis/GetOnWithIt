@@ -7,7 +7,7 @@ import { SqliteService } from './sqlite.service';
 export class RoutineService {
 
     public currentRoutine: any = [];
-    public currentRoutineTitle: string = "New Routine";
+    public currentRoutineTitle: any;
     public totalDuration = 0;
 
     public savedRoutines: any = [];
@@ -24,12 +24,17 @@ export class RoutineService {
 
     constructor(private sqlite: SqliteService) {
         this.getAllActivities();
+        this.getActiveRoutineTitle().then(result => {
+            this.currentRoutineTitle = (result == null || result == '') ? "Untitled routine" : result;
+        });
     }
 
     public addToRoutine(duration: String, name: String) {
         this.currentRoutine.push({'duration': duration, 'name': name});
         this.setTotalDuration();
         this.saveCurrentRoutine();
+        this.currentRoutineTitle = "Untitled routine";
+        this.clearActiveRoutines();
     }
 
     public getAllActivities() {
@@ -54,18 +59,18 @@ export class RoutineService {
     }
 
     public saveCurrentRoutine() {
-        this.clearCurrentRoutineFromDb().then(() => {
+        return this.clearCurrentRoutineFromDb().then(() => {
             for(let i = 0; i < this.currentRoutine.length; i++) {
                 this.sqlite.executeSql(
                     "INSERT INTO routines (routine_name, act_name, duration) VALUES (?,?,?)",
                     ['current', this.currentRoutine[i].name, this.currentRoutine[i].duration]
                 );
             }
-            return;
         });
     }
 
     public clearCurrentRoutineFromDb() {
+        this.clearActiveRoutines();
         return this.sqlite.executeSql("DELETE FROM routines WHERE routine_name = ?", ['current']);
     }
 
@@ -80,13 +85,15 @@ export class RoutineService {
         if(name == undefined || name == '') {
             return;
         }
-        for(let i = 0; i < this.currentRoutine.length; i++) {
-            this.sqlite.executeSql(
-                "INSERT INTO routines (routine_name, act_name, duration) VALUES (?,?,?)",
-                [name, this.currentRoutine[i].name, this.currentRoutine[i].duration]
-            );
-        }
-        return;
+        this.currentRoutineTitle = name;
+        this.clearActiveRoutines().then(() => {
+            for(let i = 0; i < this.currentRoutine.length; i++) {
+                this.sqlite.executeSql(
+                    "INSERT INTO routines (routine_name, act_name, duration, active) VALUES (?,?,?,?)",
+                    [name, this.currentRoutine[i].name, this.currentRoutine[i].duration, 1]
+                );
+            }
+        });
     }
 
     private setTotalDuration() {
@@ -116,17 +123,20 @@ export class RoutineService {
     }
 
     public getSavedRoutines() {
-        this.sqlite.queryEachSavedRoutines(
-            "SELECT id, routine_name, act_name, duration FROM routines WHERE NOT routine_name = 'current'",
+        return this.sqlite.queryEachSavedRoutines(
+            "SELECT id, routine_name, act_name, duration, active FROM routines WHERE NOT routine_name = 'current'",
             [])
             .then(result => {
             this.savedRoutines = result;
+            return result;
         });
     }
 
     public setAsCurrentRoutine(routineName: string) {
+        this.currentRoutineTitle = routineName;
         this.currentRoutine = this.getActivitiesFromSavedRoutines(routineName);
-        this.saveCurrentRoutine();
+        this.setAsActiveRoutine(routineName);
+        return this.saveCurrentRoutine();
     }
 
     public getActivitiesFromSavedRoutines(routineName: string) {
@@ -141,6 +151,26 @@ export class RoutineService {
         return this.sqlite.executeSql("DELETE FROM routines WHERE routine_name = ?", [routineName]).then(() => {
             this.getSavedRoutines();
         });
+    }
+
+    public updateExistingRoutine(routineName) {
+        this.deleteRoutineFromDb(routineName).then(() => {
+            return this.saveCurrentRoutineAsName(routineName);
+        });
+    }
+
+    private setAsActiveRoutine(routineName) {
+        return this.clearActiveRoutines().then(() => {
+            this.sqlite.executeSql("UPDATE routines SET active = 1 WHERE routine_name = ?", [routineName]);
+        });
+    }
+
+    private clearActiveRoutines() {
+        return this.sqlite.executeSql("UPDATE routines SET active = 0", []);
+    }
+
+    private getActiveRoutineTitle() {
+        return this.sqlite.queryEachActiveRoutineTitle("SELECT routine_name FROM routines WHERE active = 1",[]);
     }
 
 }

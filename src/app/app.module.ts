@@ -13,6 +13,7 @@ import { CreateARoutineComponent } from './modules/create-a-routine/create-a-rou
 import { SavedRoutinesComponent } from './modules/saved-routines/saved-routines.component';
 import { OrientationDirective } from './directives/orientation.directive';
 import { DialogPreviewComponent } from './util/modal-dialog/dialog-preview/dialog-preview.component';
+import { DialogSaveRoutineComponent } from "./util/modal-dialog/dialog-save-routine/dialog-save-routine.component";
 
 // Uncomment and add to NgModule imports if you need to use the HttpClient wrapper
 // import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -34,9 +35,10 @@ import { DialogPreviewComponent } from './util/modal-dialog/dialog-preview/dialo
         CreateARoutineComponent,
         SavedRoutinesComponent,
         OrientationDirective,
-        DialogPreviewComponent
+        DialogPreviewComponent,
+        DialogSaveRoutineComponent
     ],
-    entryComponents: [DialogPreviewComponent],
+    entryComponents: [DialogPreviewComponent, DialogSaveRoutineComponent],
     providers: [],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -1,0 +1,16 @@
+<StackLayout margin="24" horizontalAlignment="center" verticalAlignment="center">
+
+    <ListView id="routine-listview" [items]="routines" class="routine-preview" width="100%" height="300">
+        <ng-template let-routine="item" let-i="index">
+            <GridLayout (tap)="saveRoutine(routine.routineName)">
+                <Label [text]="routine.routineName"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+
+    <Label [text]="prompt"></Label>
+    <StackLayout orientation="horizontal" marginTop="12">
+        <Button text="cancel" (tap)="close('cancel')"></Button>
+    </StackLayout>
+
+</StackLayout>

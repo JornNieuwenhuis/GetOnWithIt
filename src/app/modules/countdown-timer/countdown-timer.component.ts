@@ -41,6 +41,7 @@ export class CountdownTimerComponent {
 
     public async startRoutine() {
         this.routineService.running = true;
+        countdown:
         for(let routine of this.routineService.currentRoutine) {
 
             sounds["go"].play();
@@ -61,8 +62,7 @@ export class CountdownTimerComponent {
 
                 //To stop timer on navigate away
                 if(!this.routineService.running) {
-                    //TODO: Find way to stop async function
-                    return;
+                    break countdown;
                 }
 
                 this.timer -= 1;

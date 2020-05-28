@@ -6,7 +6,10 @@ var Sqlite = require("nativescript-sqlite");
 })
 export class SqliteService {
 
-    public resultArray = [];
+    //TODO: improve this workaround
+    public currentRoutine = [];
+    public savedRoutines  = [];
+    public activeRoutine  = [];
 
     /* https://medium.com/@kumarandena/nativescript-groceries-app-using-sqlite-1018df947601 */
 
@@ -76,13 +79,13 @@ export class SqliteService {
     }
 
     public queryEachCurrentRoutine(query, params) {
-        this.resultArray = [];
+        this.currentRoutine = [];
         let promise = new Promise((resolve, reject) => {
         this.getDbConnection().then(db => {
             db.each(query, params, this.getCurrentRoutineFromDbCallback.bind(this), null, null)
             .then(
                 result => { // Success
-                    result = this.resultArray;
+                    result = this.currentRoutine;
                     resolve(result);
                 },
                 reject => { // Fail
@@ -94,17 +97,17 @@ export class SqliteService {
     }
 
     public getCurrentRoutineFromDbCallback(unused, data) {
-        this.resultArray.push({ 'name': data[0], 'duration': data[1] });
+        this.currentRoutine.push({ 'name': data[0], 'duration': data[1] });
     }
 
     public queryEachSavedRoutines(query, params) {
-        this.resultArray = [];
+        this.savedRoutines = [];
         let promise = new Promise((resolve, reject) => {
         this.getDbConnection().then(db => {
             db.each(query, params, this.getSavedRoutinesCallback.bind(this), null, null)
             .then(
                 result => { // Success
-                    result = this.resultArray;
+                    result = this.savedRoutines;
                     resolve(result);
                 },
                 reject => { // Fail
@@ -118,11 +121,11 @@ export class SqliteService {
     public getSavedRoutinesCallback(unused, data) {
         if(!data) return;
         let routineName = data[1];
-        if (!this.resultArray.find(o => o.routineName === routineName)) {
-            this.resultArray.push({'routineName': data[1], 'activities': []});
+        if (!this.savedRoutines.find(o => o.routineName === routineName)) {
+            this.savedRoutines.push({'routineName': data[1], 'activities': []});
         }
 
-        this.resultArray.forEach(routine => {
+        this.savedRoutines.forEach(routine => {
             if(routine.routineName == routineName) {
                 routine.activities.push(
                     {
@@ -133,6 +136,27 @@ export class SqliteService {
                 );
             }
         });
+    }
+
+    public queryEachActiveRoutineTitle(query, params) {
+        let promise = new Promise((resolve, reject) => {
+        this.getDbConnection().then(db => {
+            db.each(query, params, this.queryEachActiveRoutineTitleCallback.bind(this), null, null)
+            .then(
+                result => { // Success
+                    result = this.activeRoutine;
+                    resolve(result);
+                },
+                reject => { // Fail
+                    console.log(reject);
+                }
+            )});
+        });
+        return promise;
+    }
+
+    private queryEachActiveRoutineTitleCallback(unused, data) {
+        this.activeRoutine = data[0];
     }
 
 }

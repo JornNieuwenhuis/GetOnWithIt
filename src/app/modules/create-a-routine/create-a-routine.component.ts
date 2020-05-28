@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { RoutingService } from '~/app/services/routing.service';
 import { RoutineService } from '~/app/services/routine.service';
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { OrientationService } from '~/app/services/orientation.service';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+import { DialogSaveRoutineComponent } from '~/app/util/modal-dialog/dialog-save-routine/dialog-save-routine.component';
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -20,7 +22,9 @@ export class CreateARoutineComponent implements OnInit {
         public routing: RoutingService,
         public routineService: RoutineService,
         public orientationService: OrientationService,
-        private page: Page) {
+        private page: Page,
+        private modalService: ModalDialogService,
+        private viewContainerRef: ViewContainerRef) {
 
     }
 
@@ -136,15 +140,46 @@ export class CreateARoutineComponent implements OnInit {
     }
 
     public saveCurrentRoutineAsName() {
-        dialogs.prompt({
-            title: "Name your routine: ",
-            okButtonText: "OK",
-            cancelButtonText: "Cancel"
-        }).then(input => {
-            if(input.result) {
-                this.routineService.saveCurrentRoutineAsName(input.text);
-            }
+        this.routineService.getSavedRoutines().then(result => {
+            this.routineService.savedRoutines.unshift({ routineName: 'New routine'});
+            let options: ModalDialogOptions = {
+                context: {
+                    prompt: "Save current routine",
+                    routines: result
+                },
+                viewContainerRef: this.viewContainerRef
+            };
+
+            this.modalService.showModal(DialogSaveRoutineComponent, options).then((result: string) => {
+                if(result == 'cancel') return;
+                if(result == 'New routine') {
+                    dialogs.prompt({
+                        title: "Enter new routine name",
+                        okButtonText: "OK",
+                        cancelButtonText: "Cancel"
+                    }).then(input => {
+                        if(input.result) {
+                            this.routineService.saveCurrentRoutineAsName(input.text);
+                        }
+                    });
+                    return;
+                }
+                dialogs.prompt({
+                    title: "Replace " + result + " with current routine?",
+                    okButtonText: "OK",
+                    cancelButtonText: "Cancel"
+                }).then(input => {
+                    if(input.result) {
+                        this.routineService.updateExistingRoutine(result);
+                    }
+                });
+            });
         });
+    }
+
+    public clearCurrentRoutine(clearFromDb?) {
+        this.routineService.currentRoutineTitle = "Untitled routine";
+        this.routineService.clearCurrentRoutine(clearFromDb);
     }
 
 }

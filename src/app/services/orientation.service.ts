@@ -15,6 +15,9 @@ export class OrientationService {
         if(this.activity != undefined) {
             this.orientation = this.activity.getResources().getConfiguration().orientation == 2 ? "landscape" : "portrait";
         }
+        else {
+            this.orientation = "portrait";
+        }
     }
 
     //TODO: Add function to set orientation!
