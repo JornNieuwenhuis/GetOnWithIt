@@ -24,22 +24,24 @@ Button.-primary {
     font-size: 18;
 }
 
-Button, .activity-list Label {
-    android-elevation: 4;
+.activity-list Label {
+    background-color: whitesmoke;
+    color: #8AA399;
+}
+
+Button {
     background-color: #8AA399;
-    border-color: darkolivegreen;
-    border-radius: 20;
-    border-width: 1;
     color: whitesmoke;
+}
+
+Button, .activity-list Label {
     font-size: 18;
     font-weight: bold;
 }
 
 Button:active:not(Button.selected){
-    android-elevation: 8;
+    android-elevation: 4;
     background-color: whitesmoke;
-    border-color: darkolivegreen;
-    border-width: 1;
     color: #8AA399;
     font-size: 18;
     font-weight: bold;
@@ -50,11 +52,61 @@ Label, Button {
     font-family: monospace;
 }
 
-Button:highlighted, Label:highlighted {
-    background-color: #C1D37F;
+Button.confirmAnimation:highlighted, Label.confirmAnimation:highlighted {
+    animation-name: confirmAnimation;
+    animation-duration: 500ms;
+    color: whitesmoke;
+}
+
+@keyframes confirmAnimation {
+    from { background-color: whitesmoke; }
+    to { background-color: #C1D37F; }
+}
+
+@keyframes selectAnimation {
+    from { background-color: #8AA399; }
+    to { background-color: #C1D37F; }
+}
+
+Button.selectAnimation.selected, .activity-list GridLayout.selectAnimation.selected Label {
+    animation-name: selectAnimation;
+    animation-duration: 1s;
 }
 
 Button.selected, .activity-list GridLayout.selected Label {
-    background-color: #F6e27F;
-    color: #C1D37F;
+    background-color: #C1D37F;
+    color: whitesmoke;
+}
+
+.start-button Button {
+    background-color: #C1D37F;
+}
+
+.start-button Button, .clear-button Button {
+    width: 88;
+    height: 40;
+}
+
+.addActivityButton, .saveButton {
+    height: 40;
+    width: 40;
+}
+
+.addActivityButton Label, .saveButton Label {
+    font-size: 32;
+    color: #8AA399;
+}
+
+/* FontAwesome */
+
+.fas {
+    font-family: "fa-solid-900";
+}
+
+.far {
+    font-family: "fa-brands-400";
+}
+
+.fab {
+    font-family: "fa-brands-400";
 }

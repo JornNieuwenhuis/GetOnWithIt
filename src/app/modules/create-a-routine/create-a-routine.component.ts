@@ -6,6 +6,8 @@ import { OrientationService } from '~/app/services/orientation.service';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { DialogSaveRoutineComponent } from '~/app/util/modal-dialog/dialog-save-routine/dialog-save-routine.component';
+import { PanGestureEventData } from "tns-core-modules/ui/gestures";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 
 @Component({
   selector: 'ns-create-a-routine',
@@ -17,6 +19,10 @@ export class CreateARoutineComponent implements OnInit {
     public selectedTime: String;
     public selectedAct:  String;
     public orientation;
+
+    public targetListViewItem: any;
+    public targetListViewItemPosition: number;
+    public targetListViewItemIndex: number;
 
     constructor(
         public routing: RoutingService,
@@ -52,34 +58,35 @@ export class CreateARoutineComponent implements OnInit {
         }
     }
 
-    public async addToRoutine() {
+    public addToRoutine() {
+        this.routineService.addToRoutine(this.selectedTime, this.selectedAct).then(() => {
+            this.scrollToBottom();
+        });
+        this.addHighlightedClass();
+        this.clearSelection();
+    }
+
+    private async addHighlightedClass() {
+        //TODO: store the objects, not the name. Multiple activities with same name could give problems
         let activityButton = this.page.getViewById('act' + this.selectedAct);
         let timeButton     = this.page.getViewById(this.selectedTime + 'Button');
+        if(activityButton != undefined && timeButton != undefined) {
+            activityButton.addPseudoClass('highlighted');
+            timeButton.addPseudoClass('highlighted');
 
-        this.routineService.addToRoutine(this.selectedTime, this.selectedAct);
-        this.clearSelection();
-
-        activityButton.addPseudoClass('highlighted');
-        timeButton.addPseudoClass('highlighted');
-
-        await this.confirmDelay().then(() => {
-            activityButton.deletePseudoClass('highlighted');
-            timeButton.deletePseudoClass('highlighted');
-        });
-
-        this.scrollToBottom(true);
-    }
-
-    private confirmDelay() {
-        return new Promise(resolve => setTimeout(resolve, 150));
-    }
-
-    private async scrollToBottom(skipDelay?) {
-        if(skipDelay) {
-            let listView: any = this.page.getViewById('routine-listview');
-            return listView.scrollToIndex(this.routineService.currentRoutine.length - 1);
+            await this.confirmDelay(500).then(() => {
+                activityButton.deletePseudoClass('highlighted');
+                timeButton.deletePseudoClass('highlighted');
+            });
         }
-        await this.confirmDelay().then(() => {
+    }
+
+    private confirmDelay(timeout) {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    private async scrollToBottom() {
+        await this.confirmDelay(250).then(() => {
             let listView: any = this.page.getViewById('routine-listview');
             listView.scrollToIndex(this.routineService.currentRoutine.length - 1);
         });
@@ -180,6 +187,26 @@ export class CreateARoutineComponent implements OnInit {
     public clearCurrentRoutine(clearFromDb?) {
         this.routineService.currentRoutineTitle = "Untitled routine";
         this.routineService.clearCurrentRoutine(clearFromDb);
+    }
+
+    public handlePan(args: PanGestureEventData, currentRoutineIndex) {
+        if(args.state === 3) {
+            this.targetListViewItem.className = '';
+            this.targetListViewItemIndex = null;
+            return;
+        }
+        if(args.state === 1) {
+            this.targetListViewItemIndex = currentRoutineIndex;
+            this.targetListViewItem = args.view as GridLayout;
+        }
+        this.targetListViewItem.className = "edit-activity";
+        this.targetListViewItemPosition = args.deltaX;
+        if(args.deltaX > 100) {
+            this.targetListViewItemPosition = 300;
+            this.routineService.removeIndexFromCurrentRoutine(currentRoutineIndex).then(() => {
+                this.targetListViewItemIndex = null;
+            });
+        }
     }
 
 }

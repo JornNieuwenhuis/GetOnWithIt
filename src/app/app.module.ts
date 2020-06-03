@@ -14,6 +14,8 @@ import { SavedRoutinesComponent } from './modules/saved-routines/saved-routines.
 import { OrientationDirective } from './directives/orientation.directive';
 import { DialogPreviewComponent } from './util/modal-dialog/dialog-preview/dialog-preview.component';
 import { DialogSaveRoutineComponent } from "./util/modal-dialog/dialog-save-routine/dialog-save-routine.component";
+import { AudioHandlerDirective } from './directives/audio-handler.directive';
+import { DeselectDirective } from './directives/deselect.directive';
 
 // Uncomment and add to NgModule imports if you need to use the HttpClient wrapper
 // import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
@@ -36,7 +38,9 @@ import { DialogSaveRoutineComponent } from "./util/modal-dialog/dialog-save-rout
         SavedRoutinesComponent,
         OrientationDirective,
         DialogPreviewComponent,
-        DialogSaveRoutineComponent
+        DialogSaveRoutineComponent,
+        AudioHandlerDirective,
+        DeselectDirective
     ],
     entryComponents: [DialogPreviewComponent, DialogSaveRoutineComponent],
     providers: [],

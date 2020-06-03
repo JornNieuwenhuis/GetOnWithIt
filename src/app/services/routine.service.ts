@@ -18,8 +18,9 @@ export class RoutineService {
 
     public durations = {
         'break': { 'seconds': 10 },
-        '30s': { 'seconds': 30, 'middleMark': 20, 'urgentMark': 10 },
-        '60s': { 'seconds': 60, 'middleMark': 30, 'urgentMark': 10 }
+        '30s': { 'seconds': 30, 'middleMark': 15, 'urgentMark': 5, 'changeSides': false },
+        '60s': { 'seconds': 60, 'middleMark': 30, 'urgentMark': 10, 'changeSides': false },
+        '60sLR': { 'seconds': 60, 'middleMark': 30, 'urgentMark': 10, 'changeSides': true }
     }
 
     constructor(private sqlite: SqliteService) {
@@ -32,9 +33,9 @@ export class RoutineService {
     public addToRoutine(duration: String, name: String) {
         this.currentRoutine.push({'duration': duration, 'name': name});
         this.setTotalDuration();
-        this.saveCurrentRoutine();
         this.currentRoutineTitle = "Untitled routine";
         this.clearActiveRoutines();
+        return this.saveCurrentRoutine();
     }
 
     public getAllActivities() {
@@ -59,6 +60,7 @@ export class RoutineService {
     }
 
     public saveCurrentRoutine() {
+        //TODO: find better solution. Sqlite has limited possibilities for queries, still looking for way to update single items in DB
         return this.clearCurrentRoutineFromDb().then(() => {
             for(let i = 0; i < this.currentRoutine.length; i++) {
                 this.sqlite.executeSql(
@@ -171,6 +173,15 @@ export class RoutineService {
 
     private getActiveRoutineTitle() {
         return this.sqlite.queryEachActiveRoutineTitle("SELECT routine_name FROM routines WHERE active = 1",[]);
+    }
+
+    public removeIndexFromCurrentRoutine(index) {
+        this.currentRoutine.splice(index, 1);
+        return this.saveCurrentRoutine();
+    }
+
+    public checkChangeSide(durationName) {
+        return this.durations[durationName]['changeSides'];
     }
 
 }

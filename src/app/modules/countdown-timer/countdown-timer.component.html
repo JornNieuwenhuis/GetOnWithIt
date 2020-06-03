@@ -3,7 +3,10 @@
     [columns]="orientationService.orientation == 'portrait' ? '*' : '2*,auto'"
     [rows]="orientationService.orientation == 'portrait' ? '2*, auto' : '*'"
     [ngClass]="urgencyClass"
-    hideActionBar>
+    hideActionBar
+    audioHandler
+    [timer]="timer"
+    [changeSides]="changeSides">
 
     <StackLayout class="content" col="0" row="0" [ngClass]="orientationService.orientation">
 

@@ -17,6 +17,12 @@
     width: 95%;
 }
 
+.arrow-icon {
+    font-size: 14;
+    font-weight: 100;
+    color: #8AA399;
+}
+
 .routine-title, .list-routine-item {
     text-align: center;
 }
@@ -39,8 +45,12 @@
     padding: 4;
 }
 
+.landscape .times-list {
+    padding-top: 8;
+}
+
 .times-list {
-    padding-top: 40;
+    padding-top: 32;
 }
 
 .activity-list-item {
@@ -52,25 +62,6 @@
     padding-right: 10;
 }
 
-.start-button Button {
-    background-color: #C1D37F;
-}
-
-.start-button Button, .clear-button Button {
-    width: 88;
-    height: 40;
-}
-
-.addActivityButton Button, .saveButton Button {
-    height: 40;
-    width: 40;
-}
-
-.saveButton Button {
-    font-size: 12;
-}
-
-.saveButton {
-    margin-top: 8;
-    width: 56;
+.addActivityButton {
+    margin-left: 4;
 }

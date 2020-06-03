@@ -4,7 +4,8 @@
     horizontalAlignment="center"
     height="100%" width="100%"
     [ngClass]="orientationService.orientation"
-    [hideActionBar]>
+    [hideActionBar]
+    deselect>
 
     <GridLayout
         class="routine-container"
@@ -25,7 +26,7 @@
                 <GridLayout columns="56, *" rows="*" height="56">
                     <!-- Save routine button -->
                     <AbsoluteLayout class="saveButton" col="0">
-                        <Button text="sa ve" (tap)="saveCurrentRoutineAsName()"></Button>
+                        <Label text="&#xf0c7;" class="fas" (tap)="saveCurrentRoutineAsName()"></Label>
                     </AbsoluteLayout>
 
                     <!-- Current routine title -->
@@ -39,14 +40,15 @@
                     </StackLayout>
                 </GridLayout>
 
-                <!-- Create combinations time-activity for routine -->
+                <!-- List of activities for current routine -->
                 <StackLayout [height]="orientationService.orientation == 'portrait' ? '760px' : '650px'" horizontalAlignment="center">
 
                     <StackLayout *ngIf="routineService.currentRoutine.length > 0">
                         <ListView id="routine-listview" [items]="routineService.currentRoutine" class="list-routine" width="100%">
                             <ng-template let-item="item" let-i="index">
-                                <GridLayout>
-                                    <Label [text]="getString(item.duration, item.name)" class="list-routine-item"></Label>
+                                <GridLayout (pan)="handlePan($event, i)" columns="auto,*" [ngStyle]="{'padding-left': i === targetListViewItemIndex ? targetListViewItemPosition : 0}">
+                                    <Label class="fas arrow-icon" [text]="'remove ' + '&#xf30b;'" *ngIf="i === targetListViewItemIndex" col=0></Label>
+                                    <Label class="list-routine-item" col=1 [text]="getString(item.duration, item.name)" ></Label>
                                 </GridLayout>
                             </ng-template>
                         </ListView>
@@ -86,8 +88,7 @@
         <StackLayout
             class="routine-container-child"
             [col]="orientationService.orientation == 'portrait' ? '0' : '1'"
-            [row]="orientationService.orientation == 'portrait' ? '1' : '0'"
-            >
+            [row]="orientationService.orientation == 'portrait' ? '1' : '0'">
 
             <StackLayout class="routine-creator">
 
@@ -98,18 +99,20 @@
                         <StackLayout col="0">
 
                             <!-- Add activity button -->
-                            <AbsoluteLayout class="addActivityButton">
-                                <Button text="+" (tap)="addActivity()"></Button>
+                            <AbsoluteLayout class="addActivityButton" horizontalAlignment="left">
+                                <Label text="&#xf067;" class="fas" (tap)="addActivity()"></Label>
                             </AbsoluteLayout>
 
                             <ListView [items]="routineService.activities" class="activity-list">
 
                                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                                     <GridLayout
+                                    col="*"
+                                    row="56"
                                     (tap)="selectActivity(item.name)"
                                     (longPress)="removeActivity(item.id, item.name)"
                                     [ngClass]="checkActSelection(item.name)">
-                                        <Label [id]="'act' + item.name" [text]="item.name" class="activity-list-item"></Label>
+                                        <Label [id]="'act' + item.name" [text]="item.name" class="activity-list-item selectAnimation confirmAnimation"></Label>
                                     </GridLayout>
                                 </ng-template>
 
@@ -118,10 +121,11 @@
 
                         <!-- Times to choose from -->
                         <StackLayout col="1">
-                            <GridLayout rows="80, 80, 80" columns="*" class="times-list">
-                                <Button id="breakButton" text="break" row="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')"></Button>
-                                <Button id="30sButton"   text="30s"   row="1" (tap)="selectTime('30s')"       [ngClass]="checkTimeSelection('30s')"></Button>
-                                <Button id="60sButton"   text="60s"   row="2" (tap)="selectTime('60s')"       [ngClass]="checkTimeSelection('60s')"></Button>
+                            <GridLayout rows="72, 72, 72, 72" columns="*" class="times-list">
+                                <Button id="breakButton" text="break"   row="0" (tap)="selectActivity('break')" [ngClass]="checkTimeSelection('break')" class="selectAnimation confirmAnimation"></Button>
+                                <Button id="30sButton"   text="30s"     row="1" (tap)="selectTime('30s')"       [ngClass]="checkTimeSelection('30s')"   class="selectAnimation confirmAnimation"></Button>
+                                <Button id="60sButton"   text="60s"     row="2" (tap)="selectTime('60s')"       [ngClass]="checkTimeSelection('60s')"   class="selectAnimation confirmAnimation"></Button>
+                                <Button id="60sLRButton" text="60s L/R" row="3" (tap)="selectTime('60sLR')"     [ngClass]="checkTimeSelection('60sLR')" class="selectAnimation confirmAnimation"></Button>
                             </GridLayout>
                         </StackLayout>
 
